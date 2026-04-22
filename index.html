@@ -1896,10 +1896,17 @@ class MolController{
       // Fix corrupted posMode: throughM only takes 2 verts; if 3 saved, switch to 3vtx
       if(this.posMode==='throughM' && this.posVerts.length===3) this.posMode='3vtx';
     } else {
-      // Default: reset to preset ligands, no POS
+      // Default: reset to preset ligands
+      // If preset has defaultPosVerts baked in, auto-load POS
       this.ligs=p.l.split('');
-      this.showPOS=false;this.posVerts=[];
-      this.posMode=this.id==='tetrahedral'?'throughM':'3vtx';
+      if(p.defaultPosVerts&&p.defaultPosVerts.length){
+        this.showPOS=true;
+        this.posVerts=[...p.defaultPosVerts];
+        this.posMode=p.defaultPosMode||'3vtx';
+      } else {
+        this.showPOS=false;this.posVerts=[];
+        this.posMode=this.id==='tetrahedral'?'throughM':'3vtx';
+      }
     }
     this.showCOS=false;this.showMI=false;
     // Sync UI toggles
@@ -2182,38 +2189,38 @@ class MolController{
 // OCT CONTROLLER
 // ═══════════════════════════════════════════════
 const OCT_PRESETS=[
-  {id:'ma6',     l:'AAAAAA', label:'MA₆',      oa:false,
+  {id:'ma6',     l:'AAAAAA', label:'MA₆',      oa:false, defaultPosVerts:[2,3], defaultPosMode:'throughM',
     examples:[
       {formula:'[Co(H₂O)₆]³⁺', note:'All 6 identical — no isomers', geo:'oct', ligands:['H₂O','H₂O','H₂O','H₂O','H₂O','H₂O']}
     ]},
-  {id:'ma5b',    l:'AABAAA', label:'MA₅B',     oa:false,
+  {id:'ma5b',    l:'AABAAA', label:'MA₅B',     oa:false, defaultPosVerts:[2,3], defaultPosMode:'throughM',
     examples:[
       {formula:'[Co(NH₃)₅Br]²⁺',  note:'MA₅B — Br on equatorial plane', geo:'oct', ligands:['NH₃','NH₃','Br','NH₃','NH₃','NH₃']},
       {formula:'[Co(NH₃)₅NO₂]²⁺', note:'MA₅B — NO₂ on equatorial plane', geo:'oct', ligands:['NH₃','NH₃','NO₂','NH₃','NH₃','NH₃']}
     ]},
-  {id:'ma4b2c',  l:'AABABA', label:'cis',      oa:false, group:'MA₄B₂',  groupId:'ma4b2',
+  {id:'ma4b2c',  l:'AABABA', label:'cis',      oa:false, group:'MA₄B₂',  groupId:'ma4b2', defaultPosVerts:[0,2,4], defaultPosMode:'3vtx',
     examples:[
       {formula:'cis-[Co(NH₃)₄Cl₂]²⁺',   note:'cis: both Cl on same side (90°)', geo:'oct', ligands:['NH₃','NH₃','Cl','NH₃','Cl','NH₃']}
     ]},
-  {id:'ma4b2t',  l:'BAAAAB', label:'trans',    oa:false, group:'MA₄B₂',  groupId:'ma4b2',
+  {id:'ma4b2t',  l:'BAAAAB', label:'trans',    oa:false, group:'MA₄B₂',  groupId:'ma4b2', defaultPosVerts:[0,1], defaultPosMode:'throughM',
     examples:[
       {formula:'trans-[Co(NH₃)₄Cl₂]²⁺',  note:'trans: both Cl opposite (180°)', geo:'oct', ligands:['Cl','Cl','NH₃','NH₃','NH₃','NH₃']}
     ]},
-  {id:'ma4bcc',  l:'AABACA', label:'cis',      oa:false, group:'MA₄BC',  groupId:'ma4bc'},
-  {id:'ma4bct',  l:'BCAAAA', label:'trans',    oa:false, group:'MA₄BC',  groupId:'ma4bc'},
-  {id:'ma3b3f',  l:'ABABAB', label:'fac',      oa:false, group:'MA₃B₃',  groupId:'ma3b3',
+  {id:'ma4bcc',  l:'AABACA', label:'cis',      oa:false, group:'MA₄BC',  groupId:'ma4bc', defaultPosVerts:[0,2,4], defaultPosMode:'3vtx'},
+  {id:'ma4bct',  l:'BCAAAA', label:'trans',    oa:false, group:'MA₄BC',  groupId:'ma4bc', defaultPosVerts:[0,1], defaultPosMode:'throughM'},
+  {id:'ma3b3f',  l:'ABABAB', label:'fac',      oa:false, group:'MA₃B₃',  groupId:'ma3b3', defaultPosVerts:[0,2,4], defaultPosMode:'3vtx',
     examples:[
       {formula:'fac-[Co(NH₃)₃(NO₂)₃]', note:'fac: NH₃ at T,R,F — one triangular face', geo:'oct', ligands:['NH₃','NO₂','NH₃','NO₂','NH₃','NO₂'], presetLigs:'ABABAB'},
       {formula:'fac-[CrCl₃(py)₃]',      note:'fac: py at T,R,F — one triangular face',  geo:'oct', ligands:['py','Cl','py','Cl','py','Cl'],         presetLigs:'ABABAB'}
     ]},
-  {id:'ma3b3m',  l:'AABBAB', label:'mer',      oa:false, group:'MA₃B₃',  groupId:'ma3b3',
+  {id:'ma3b3m',  l:'AABBAB', label:'mer',      oa:false, group:'MA₃B₃',  groupId:'ma3b3', defaultPosVerts:[0,1], defaultPosMode:'throughM',
     examples:[
       {formula:'mer-[Co(NH₃)₃(NO₂)₃]', note:'mer: NH₃ at T,B,F — one plane through M', geo:'oct', ligands:['NH₃','NH₃','NO₂','NO₂','NH₃','NO₂'], presetLigs:'AABBAB'},
       {formula:'mer-[CrCl₃(py)₃]',      note:'mer: py at T,B,F — one plane through M',   geo:'oct', ligands:['py','py','Cl','Cl','py','Cl'],         presetLigs:'AABBAB'}
     ]},
-  {id:'ma3b2cf', l:'ACABAB', label:'fac',      oa:false, group:'MA₃B₂C', groupId:'ma3b2c'},
-  {id:'ma3b2cm1',l:'AAABBC', label:'mer (1)',  oa:false, group:'MA₃B₂C', groupId:'ma3b2c'},
-  {id:'ma3b2cm2',l:'AAABCB', label:'mer (2)',  oa:false, group:'MA₃B₂C', groupId:'ma3b2c'},
+  {id:'ma3b2cf', l:'ACABAB', label:'fac',      oa:false, group:'MA₃B₂C', groupId:'ma3b2c', defaultPosVerts:[0,2,4], defaultPosMode:'3vtx'},
+  {id:'ma3b2cm1',l:'AAABBC', label:'mer (1)',  oa:false, group:'MA₃B₂C', groupId:'ma3b2c', defaultPosVerts:[0,1], defaultPosMode:'throughM'},
+  {id:'ma3b2cm2',l:'AAABCB', label:'mer (2)',  oa:false, group:'MA₃B₂C', groupId:'ma3b2c', defaultPosVerts:[0,1], defaultPosMode:'throughM'},
   {id:'ma3bcdf', l:'AAABCD', label:'fac',      oa:true,  group:'MA₃BCD', groupId:'ma3bcd'},
   {id:'ma3bcdm', l:'AABABCD'.slice(0,6), label:'mer (1)', oa:false, group:'MA₃BCD', groupId:'ma3bcd'},
   {id:'ma3bcdm2',l:'AABACB', label:'mer (2)', oa:false, group:'MA₃BCD', groupId:'ma3bcd'},
@@ -3775,16 +3782,16 @@ const OCT_BI_GROUPS=[
     title:'M(AA)a₄',
     sub:'1 symmetric bidentate (AA) + 4 identical monodentate (a). <strong>G.I=0, E.P=0, T.I=1.</strong>',
     isomers:[{id:'bi_maa_a4',label:'M(AA)a₄',oa:false,gi:0,ep:0,ti:1,
-      ligs:['a','a','A','a','A','a'],chelates:[[2,4,'AA']],ry:20,rx:25}]
+      ligs:['a','a','A','a','A','a'],chelates:[[2,4,'AA']],ry:20,rx:25,defaultPosVerts:[0,1],defaultPosMode:'throughM'}]
   },
   {
     title:'M(AA)a₃b',
     sub:'1 symmetric bidentate (AA) + 3a + 1b. <strong>G.I=2, E.P=0, S.I=3.</strong> b can be trans (axial) or cis (equatorial) to the chelate ring.',
     isomers:[
       {id:'bi_maa_a3b_1',label:'trans-b (O.Inactive)',oa:false,gi:2,ep:0,ti:2,
-        ligs:['b','a','A','a','A','a'],chelates:[[2,4,'AA']],ry:20,rx:25},
+        ligs:['b','a','A','a','A','a'],chelates:[[2,4,'AA']],ry:20,rx:25,defaultPosVerts:[0,1],defaultPosMode:'throughM'},
       {id:'bi_maa_a3b_2',label:'cis-b (O.Inactive)',oa:false,gi:2,ep:0,ti:2,
-        ligs:['a','a','A','b','A','a'],chelates:[[2,4,'AA']],ry:20,rx:25}
+        ligs:['a','a','A','b','A','a'],chelates:[[2,4,'AA']],ry:20,rx:25,defaultPosVerts:[0,2,4],defaultPosMode:'3vtx'}
     ]
   },
   {
@@ -3792,9 +3799,9 @@ const OCT_BI_GROUPS=[
     sub:'1 symmetric bidentate (AA) + 2a + 2b. <strong>G.I=3, E.P=1, S.I=4.</strong> Three isomers — isomer 3 has no POS → O.Active.',
     isomers:[
       {id:'bi_maa_a2b2_1',label:'isomer 1 (O.Inactive)',oa:false,gi:3,ep:0,ti:3,
-        ligs:['a','a','A','b','A','b'],chelates:[[2,4,'AA']],ry:20,rx:25},
+        ligs:['a','a','A','b','A','b'],chelates:[[2,4,'AA']],ry:20,rx:25,defaultPosVerts:[0,1],defaultPosMode:'throughM'},
       {id:'bi_maa_a2b2_2',label:'isomer 2 (O.Inactive)',oa:false,gi:3,ep:0,ti:3,
-        ligs:['a','b','A','a','A','b'],chelates:[[2,4,'AA']],ry:20,rx:25},
+        ligs:['a','b','A','a','A','b'],chelates:[[2,4,'AA']],ry:20,rx:25,defaultPosVerts:[0,1],defaultPosMode:'throughM'},
       {id:'bi_maa_a2b2_3',label:'isomer 3 (O.Active)',oa:true,gi:3,ep:1,ti:4,
         ligs:['a','b','A','b','A','a'],chelates:[[2,4,'AA']],ry:20,rx:25}
     ]
@@ -3812,7 +3819,7 @@ const OCT_BI_GROUPS=[
     sub:'2 symmetric bidentate (AA) + 2 identical monodentate (a). <strong>G.I=2, E.P=1, S.I=3.</strong> Trans → O.Inactive; Cis → O.Active.',
     isomers:[
       {id:'bi_maa2_a2_trans',label:'trans (O.Inactive)',oa:false,gi:2,ep:0,ti:2,
-        ligs:['a','a','A','A','A','A'],chelates:[[2,4,'AA'],[3,5,'AA']],ry:20,rx:25,
+        ligs:['a','a','A','A','A','A'],chelates:[[2,4,'AA'],[3,5,'AA']],ry:20,rx:25,defaultPosVerts:[0,1],defaultPosMode:'throughM',
         examples:[
           {formula:'trans-[CrCl₂(ox)₂]³⁻',note:'Cl trans (180°) → POS present → O.Inactive',geo:'oct',
            ligands:['Cl','Cl','ox','ox','ox','ox'],chelates:[[2,4,'AA'],[3,5,'AA']],ry:20,rx:25},
@@ -3820,7 +3827,7 @@ const OCT_BI_GROUPS=[
            ligands:['Cl','Cl','en','en','en','en'],chelates:[[2,4,'AA'],[3,5,'AA']],ry:20,rx:25}
         ]},
       {id:'bi_maa2_a2_cis',label:'cis (O.Active)',oa:true,gi:2,ep:1,ti:3,
-        ligs:['A','a','A','A','A','a'],chelates:[[2,4,'AA'],[0,3,'AA']],ry:25,rx:20,
+        ligs:['A','a','A','A','A','a'],chelates:[[2,4,'AA'],[0,3,'AA']],ry:25,rx:20,defaultPosVerts:[2,4,3],defaultPosMode:'3vtx',
         examples:[
           {formula:'cis-[CrCl₂(ox)₂]³⁻',note:'Cl cis (90°) → no POS → O.Active',geo:'oct',
            ligands:['ox','Cl','ox','ox','ox','Cl'],chelates:[[2,4,'AA'],[0,3,'AA']],ry:25,rx:20},
@@ -3834,9 +3841,9 @@ const OCT_BI_GROUPS=[
     sub:'2 symmetric bidentate (AA) + a + b monodentate. <strong>G.I=2, E.P=1, S.I=3.</strong> Same pattern as M(AA)₂a₂.',
     isomers:[
       {id:'bi_maa2_ab_trans',label:'trans (O.Inactive)',oa:false,gi:2,ep:0,ti:2,
-        ligs:['a','b','A','A','A','A'],chelates:[[2,4,'AA'],[3,5,'AA']],ry:20,rx:25},
+        ligs:['a','b','A','A','A','A'],chelates:[[2,4,'AA'],[3,5,'AA']],ry:20,rx:25,defaultPosVerts:[0,1],defaultPosMode:'throughM'},
       {id:'bi_maa2_ab_cis',label:'cis (O.Active)',oa:true,gi:2,ep:1,ti:3,
-        ligs:['A','a','A','A','A','b'],chelates:[[2,4,'AA'],[0,3,'AA']],ry:25,rx:20,
+        ligs:['A','a','A','A','A','b'],chelates:[[2,4,'AA'],[0,3,'AA']],ry:25,rx:20,defaultPosVerts:[2,4,3],defaultPosMode:'3vtx',
         examples:[
           {formula:'cis-[Cr(ox)₂ClBr]³⁻',note:'2 ox bidentate + Cl + Br cis → O.Active',geo:'oct',
            ligands:['ox','Cl','ox','ox','ox','Br'],chelates:[[2,4,'AA'],[0,3,'AA']],ry:25,rx:20}
@@ -3932,7 +3939,14 @@ class OctBiController{
     } else {
       this.ligs=[...iso.ligs];
       this.chelates=iso.chelates.map(c=>[...c]);
-      this.showPOS=false; this.posVerts=[]; this.posMode='3vtx';
+      // Auto-load POS if preset has defaultPosVerts baked in
+      if(iso.defaultPosVerts&&iso.defaultPosVerts.length){
+        this.showPOS=true;
+        this.posVerts=[...iso.defaultPosVerts];
+        this.posMode=iso.defaultPosMode||'3vtx';
+      } else {
+        this.showPOS=false; this.posVerts=[]; this.posMode='3vtx';
+      }
     }
     this.showMI=false;
     this.ry=iso.ry??20; this.rx=iso.rx??25; this.vx=0; this.vy=0;
@@ -4805,11 +4819,11 @@ const TET_BI_GROUPS=[
   {title:'M(AA)₂',
    sub:'2 symmetric bidentate filling all 4 positions. <strong>G.I=0, E.P=0, T.I=1.</strong> POS present → O.Inactive.',
    isomers:[{id:'tet_maa2',label:'M(AA)₂',oa:false,gi:0,ep:0,ti:1,
-     ligs:['A','A','A','A'],chelates:[[0,3,'AA'],[1,2,'AA']],ry:20}]},
+     ligs:['A','A','A','A'],chelates:[[0,3,'AA'],[1,2,'AA']],ry:20,defaultPosVerts:[0,2],defaultPosMode:'throughM'}]},
   {title:'M(AA)a₂',
    sub:'1 symmetric bidentate + 2 identical monodentate (a). <strong>G.I=0, E.P=0, T.I=1.</strong> POS present → O.Inactive.',
    isomers:[{id:'tet_maa_a2',label:'M(AA)a₂',oa:false,gi:0,ep:0,ti:1,
-     ligs:['A','a','A','a'],chelates:[[0,2,'AA']],ry:20,
+     ligs:['A','a','A','a'],chelates:[[0,2,'AA']],ry:20,defaultPosVerts:[0,2],defaultPosMode:'throughM',
      examples:[
        {formula:'[Zn(en)Cl₂]',note:'en bridges Top-Bot; Cl at Left and Right → POS present → O.Inactive',geo:'tet',
         ligands:['en','Cl','en','Cl'],chelates:[[0,2,'AA']],ry:20}
@@ -4817,7 +4831,7 @@ const TET_BI_GROUPS=[
   {title:'M(AA)ab',
    sub:'1 symmetric bidentate + 2 different monodentate (a,b). <strong>G.I=0, E.P=0, T.I=1.</strong> POS present → O.Inactive.',
    isomers:[{id:'tet_maa_ab',label:'M(AA)ab',oa:false,gi:0,ep:0,ti:1,
-     ligs:['A','a','A','b'],chelates:[[0,2,'AA']],ry:20}]},
+     ligs:['A','a','A','b'],chelates:[[0,2,'AA']],ry:20,defaultPosVerts:[0,2],defaultPosMode:'throughM'}]},
   {title:'M(AB)a₂',
    sub:'1 unsymmetric bidentate + 2 identical monodentate (a). <strong>G.I=0, E.P=0, T.I=1.</strong> POS present → O.Inactive.',
    isomers:[{id:'tet_mab_a2',label:'M(AB)a₂',oa:false,gi:0,ep:0,ti:1,
@@ -4833,7 +4847,7 @@ const TET_BI_GROUPS=[
   {title:'M(AB)(AA)',
    sub:'1 unsymmetric + 1 symmetric bidentate. <strong>G.I=0, E.P=0, T.I=1.</strong> POS present → O.Inactive.',
    isomers:[{id:'tet_mab_maa',label:'M(AB)(AA)',oa:false,gi:0,ep:0,ti:1,
-     ligs:['P','A','B','A'],chelates:[[0,2,'AB'],[1,3,'AA']],ry:20}]},
+     ligs:['P','A','B','A'],chelates:[[0,2,'AB'],[1,3,'AA']],ry:20,defaultPosVerts:[0,2],defaultPosMode:'throughM'}]},
 ];
 
 // ═══════════════════════════════════════════════
@@ -4880,7 +4894,7 @@ const SQP_BI_GROUPS=[
    sub:'1 unsymmetric bidentate + 2 identical monodentate (a). <strong>G.I=0, E.P=0, T.I=1.</strong> Molecular plane always POS → O.Inactive.',
    isomers:[
      {id:'sqp_mab_a2',label:'M(AB)a₂',oa:false,gi:0,ep:0,ti:1,
-       ligs:['P','a','B','a'],chelates:[[0,2,'AB']],ry:20,rx:25},
+       ligs:['P','a','B','a'],chelates:[[0,2,'AB']],ry:20,defaultPosVerts:[0,2],defaultPosMode:'throughM',rx:25},
    ]},
   {title:'M(AB)(AA)',
    sub:'1 unsymmetric + 1 symmetric bidentate. <strong>G.I=0, E.P=0, T.I=1.</strong> O.Inactive.',
@@ -4919,7 +4933,14 @@ class TetBiController{
     } else {
       this.ligs=[...iso.ligs];
       this.chelates=iso.chelates.map(c=>[...c]);
-      this.showPOS=false; this.posVerts=[]; this.posMode='3vtx';
+      // Auto-load POS if preset has defaultPosVerts baked in
+      if(iso.defaultPosVerts&&iso.defaultPosVerts.length){
+        this.showPOS=true;
+        this.posVerts=[...iso.defaultPosVerts];
+        this.posMode=iso.defaultPosMode||'3vtx';
+      } else {
+        this.showPOS=false; this.posVerts=[]; this.posMode='3vtx';
+      }
     }
     this.showMI=false;
     this.ry=iso.ry??20; this.rx=0; this.vx=0; this.vy=0;

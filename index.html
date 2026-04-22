@@ -323,8 +323,13 @@ canvas.mol-canvas:active{cursor:grabbing;}
 }
 @media(max-width:760px){
   .bi-layout{grid-template-columns:1fr;}
-  .bi-sidebar{max-height:200px;border-right:none;border-bottom:1px solid var(--border);}
-  .bi-right-panel{width:100%;border-left:none;border-top:1px solid var(--border);}
+  .bi-sidebar{max-height:180px;border-right:none;border-bottom:1px solid var(--border);}
+  .bi-right-panel{width:100%!important;border-left:none!important;border-top:1px solid var(--border);}
+  /* Stack canvas and right panel vertically on mobile */
+  .bi-main>div>div[style*="display:flex"],
+  .bi-main .ctopbar+div[style*="display:flex"]{flex-direction:column!important;}
+  /* Canvas takes full width on mobile */
+  .mol-canvas{min-height:260px!important;}
 }
 /* Bidentate editable example card */
 .bi-ex-card{background:var(--paper);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;}
@@ -384,7 +389,7 @@ footer{background:var(--ink);color:rgba(245,242,236,0.5);padding:56px max(24px,5
     <li><a href="#visualizer">Explore</a></li>
     <li><a href="#about">About</a></li>
   </ul>
-  <a class="nav-yt" href="https://www.youtube.com/@chemicular" target="_blank" rel="noopener">
+  <a class="nav-yt" href="http://www.youtube.com/@ChemicularOfficial" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24"><path d="M21.8 8s-.2-1.4-.8-2c-.7-.8-1.6-.8-2-.8C16.2 5 12 5 12 5s-4.2 0-7 .2c-.4 0-1.3 0-2 .8-.6.6-.8 2-.8 2S2 9.6 2 11.2v1.5c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.7.8 1.7.7 2.2.8C6.8 19 12 19 12 19s4.2 0 7-.2c.4 0 1.3 0 2-.8.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.5C22 9.6 21.8 8 21.8 8zM10 15V9l5.5 3-5.5 3z"/></svg>
     YouTube
   </a>
@@ -399,7 +404,7 @@ footer{background:var(--ink);color:rgba(245,242,236,0.5);padding:56px max(24px,5
     <p class="hero-sub">Interactive 3D visualizations covering C-No 4 &amp; 6 — tetrahedral, square planar, and octahedral complexes with live editable ligands and symmetry planes.</p>
     <div class="hero-cta">
       <a href="#visualizer" class="btn-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16"/></svg>Explore Now</a>
-      <a href="https://www.youtube.com/@chemicular" target="_blank" class="btn-secondary">Watch on YouTube ↗</a>
+      <a href="http://www.youtube.com/@ChemicularOfficial" target="_blank" class="btn-secondary">Watch on YouTube ↗</a>
     </div>
     <div class="hero-stats">
       <div><div class="hero-stat-num">3</div><div class="hero-stat-lbl">Geometries</div></div>
@@ -410,7 +415,7 @@ footer{background:var(--ink);color:rgba(245,242,236,0.5);padding:56px max(24px,5
   <div class="hero-visual reveal">
     <div class="hero-canvas-wrap">
       <canvas id="heroCanvas"></canvas>
-      <div class="hero-canvas-label">MABCD tetrahedral — drag to rotate</div>
+      <div class="hero-canvas-label">MA₃B₃ octahedral — drag to rotate</div>
     </div>
   </div>
 </section>
@@ -938,14 +943,14 @@ footer{background:var(--ink);color:rgba(245,242,236,0.5);padding:56px max(24px,5
 <footer>
   <div class="footer-brand">
     <div class="footer-logo">Chemicular</div>
-    <a class="footer-yt-link" href="https://www.youtube.com/@chemicular" target="_blank">
+    <a class="footer-yt-link" href="http://www.youtube.com/@ChemicularOfficial" target="_blank">
       <svg viewBox="0 0 24 24"><path d="M21.8 8s-.2-1.4-.8-2c-.7-.8-1.6-.8-2-.8C16.2 5 12 5 12 5s-4.2 0-7 .2c-.4 0-1.3 0-2 .8-.6.6-.8 2-.8 2S2 9.6 2 11.2v1.5c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.7.8 1.7.7 2.2.8C6.8 19 12 19 12 19s4.2 0 7-.2c.4 0 1.3 0 2-.8.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.5C22 9.6 21.8 8 21.8 8zM10 15V9l5.5 3-5.5 3z"/></svg>
       Watch on YouTube
     </a>
   </div>
   <div><div class="footer-col-title">Topics</div><ul class="footer-links"><li><a href="#visualizer">C-No 6 Octahedral</a></li><li><a href="#visualizer" onclick="switchGeo('tet')">C-No 4 Tetrahedral</a></li><li><a href="#visualizer" onclick="switchGeo('sqp')">C-No 4 Square Planar</a></li><li><a href="#">MO Theory (soon)</a></li></ul></div>
-  <div><div class="footer-col-title">Resources</div><ul class="footer-links"><li><a href="https://www.youtube.com/@chemicular" target="_blank">YouTube Channel</a></li><li><a href="#">Study Notes</a></li><li><a href="#">Request a Topic</a></li></ul></div>
-  <div><div class="footer-col-title">Contact</div><ul class="footer-links"><li><a href="https://www.youtube.com/@chemicular" target="_blank">YouTube</a></li></ul></div>
+  <div><div class="footer-col-title">Resources</div><ul class="footer-links"><li><a href="http://www.youtube.com/@ChemicularOfficial" target="_blank">YouTube Channel</a></li><li><a href="#">Study Notes</a></li><li><a href="#">Request a Topic</a></li></ul></div>
+  <div><div class="footer-col-title">Contact</div><ul class="footer-links"><li><a href="http://www.youtube.com/@ChemicularOfficial" target="_blank">YouTube</a></li></ul></div>
   <div class="footer-bottom">
     <span>© 2025 Chemicular. Chemistry Visualized.</span>
     <span>Built for learners who want to <em>see</em> chemistry.</span>
@@ -1816,6 +1821,8 @@ class MolController{
     const pw=document.getElementById(this.posVtxWrapId);if(pw)pw.style.display='none';
     this.refreshLigGrid();this.refreshVtxSel();this.refreshPresets();this.updateLabel();this.updateVerdict();
     this.updateSaveBtnState();
+    // Re-sync vtx buttons after layout settles (needed when canvas was hidden)
+    requestAnimationFrame(()=>{this.refreshVtxSel();this.updateVerdict();});
   }
 
   _loadSavedStates(){
@@ -2047,10 +2054,20 @@ class MolController{
     if(hasPOS)tags.push(`<span class="stag st-pos">POS ✓</span>`);
     else if(this.showPOS)tags.push(`<span class="stag st-no">POS: select ${maxV-this.posVerts.length} more</span>`);
     else tags.push(`<span class="stag st-no">POS off</span>`);
-
     if(this.showMI)tags.push(`<span class="stag st-mi">M.I. shown</span>`);
     if(st)st.innerHTML=tags.join('');
     const names=this.vShortNames||[];
+    // Tetrahedral: verdict is always determined by ligand composition, never by POS state
+    if(this.id==='tetrahedral'){
+      const isOA=(new Set(this.ligs).size===4);
+      if(isOA){
+        vb.className='vbox vbox-oa';vb.innerHTML=`<div class="vbox-title">Optically Active (O.A)</div><div class="vbox-sub">No POS possible → non-superimposable mirror images exist.</div>`;
+      } else {
+        vb.className='vbox vbox-oi';vb.innerHTML=`<div class="vbox-title">Optically Inactive (O.In)</div><div class="vbox-sub">POS present → mirror image superimposable → O.Inactive.</div>`;
+      }
+      if(pi)pi.textContent='';
+      return;
+    }
     if(!this.showPOS&&!this.showCOS){
       vb.className='vbox vbox-nd';vb.innerHTML=`<div class="vbox-title">Toggle planes to analyse</div><div class="vbox-sub">–</div>`;if(pi)pi.textContent='';
     } else if(hasPOS||hasCOS){
@@ -2298,7 +2315,7 @@ const sqp=new MolController({
 // ═══════════════════════════════════════════════
 // HERO & THUMB CANVASES
 // ═══════════════════════════════════════════════
-let hRy=20,hRx=15,hVx=0.35,hDrag=false,hLX,hLY;
+let hRy=20,hRx=22,hVx=0.4,hDrag=false,hLX=0,hLY=0;
 function initHero(){
   const c=document.getElementById('heroCanvas');if(!c)return;
   const dpr=window.devicePixelRatio||1;
@@ -2313,9 +2330,17 @@ function initHero(){
 }
 
 function heroLoop(){
-  if(!hDrag)hRy+=hVx*0.12;
+  if(!hDrag){hRy+=hVx*0.12;hVx*=0.92;}
+  hRx=Math.max(-60,Math.min(60,hRx));
   const c=document.getElementById('heroCanvas');if(!c)return;
-  drawTet(c,['A','B','C','D'],false,-1,tRy2);
+  drawMol(c,{
+    ligs:['A','A','A','B','B','B'],
+    verts:getOctVerts(),
+    edges:[[0,2],[0,3],[0,4],[0,5],[1,2],[1,3],[1,4],[1,5],[2,4],[2,5],[3,4],[3,5]],
+    baseEdges:[],posVerts:[],doPOS:false,doCOS:false,doMI:false,
+    ry:hRy,rx:hRx,Rf:0.30,flash:-1,
+    posIsFixed:false,posMode:'3vtx',useWedgeBonds:false,useShadow:true,showPosArrow:false
+  });
   requestAnimationFrame(heroLoop);
 }
 
@@ -5041,18 +5066,16 @@ class TetBiController{
     else tags.push('<span class="stag st-no">POS off</span>');
     if(this.showMI)tags.push('<span class="stag st-mi">M.I. shown</span>');
     if(st)st.innerHTML=tags.join('');
-    if(!this.showPOS){
+    // Always show correct verdict based on activeIso.oa — never show O.Active for OI complexes
+    if(this.activeIso&&this.activeIso.oa===false){
+      vb.className='vbox vbox-oi';vb.innerHTML='<div class="vbox-title">Optically Inactive (O.In)</div><div class="vbox-sub">POS present → O.Inactive.</div>';
+      if(pi)pi.textContent='';
+    } else if(this.activeIso&&this.activeIso.oa===true){
+      vb.className='vbox vbox-oa';vb.innerHTML='<div class="vbox-title">Optically Active (O.A)</div><div class="vbox-sub">No valid POS → O.Active.</div>';
+      if(pi)pi.textContent='';
+    } else {
       vb.className='vbox vbox-nd';vb.innerHTML='<div class="vbox-title">Toggle POS to analyse</div><div class="vbox-sub">–</div>';
       if(pi)pi.textContent='';
-    } else if(hasPOS){
-      vb.className='vbox vbox-oi';vb.innerHTML='<div class="vbox-title">Optically Inactive (O.In)</div><div class="vbox-sub">POS present → O.Inactive.</div>';
-      if(pi){
-        if(this.posMode==='throughM')pi.innerHTML=`σ through M + <strong>${this.posVerts.map(i=>TET_VNAMES[i]+'='+this.ligs[i]).join(', ')}</strong>`;
-        else pi.innerHTML=`σ plane: <strong>${this.posVerts.map(i=>TET_VNAMES[i]+'='+this.ligs[i]).join(', ')}</strong>`;
-      }
-    } else {
-      vb.className='vbox vbox-oa';vb.innerHTML='<div class="vbox-title">Optically Active (O.A)</div><div class="vbox-sub">No valid POS → O.Active.</div>';
-      if(pi)pi.textContent=this.showPOS?`Select ${maxV-this.posVerts.length} more vertices`:'';
     }
   }
 

@@ -1827,9 +1827,10 @@ class MolController{
       }
       this.dragging=false;this.moved=false;if(this.id!=='tetrahedral')c.style.cursor='grab';
     });
-    c.addEventListener('touchstart',e=>{this.dragging=true;this.moved=false;this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:true});
-    window.addEventListener('touchmove',e=>{
+    c.addEventListener('touchstart',e=>{e.preventDefault();this.dragging=true;this.moved=false;this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:false});
+    c.addEventListener('touchmove',e=>{
       if(!this.dragging)return;
+      e.preventDefault();
       const dx=e.touches[0].clientX-this.lx,dy=e.touches[0].clientY-this.ly;
       if(Math.abs(dx)>3||Math.abs(dy)>3)this.moved=true;
       if(this.id!=='tetrahedral'){
@@ -1837,8 +1838,8 @@ class MolController{
         this.vx=dx*0.55;this.vy=dy*0.45;
       }
       this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;
-    },{passive:true});
-    window.addEventListener('touchend',e=>{
+    },{passive:false});
+    c.addEventListener('touchend',e=>{
       if(!this.moved&&e.changedTouches.length){
         const t=e.changedTouches[0];
         let h=-1;
@@ -2389,9 +2390,9 @@ function initHero(){
   c.addEventListener('mousedown',e=>{hDrag=true;hLX=e.clientX;hLY=e.clientY;});
   window.addEventListener('mousemove',e=>{if(!hDrag)return;hRy+=(e.clientX-hLX)*0.6;hRx+=(e.clientY-hLY)*0.4;hVx=(e.clientX-hLX)*0.6;hLX=e.clientX;hLY=e.clientY;});
   window.addEventListener('mouseup',()=>hDrag=false);
-  c.addEventListener('touchstart',e=>{hDrag=true;hLX=e.touches[0].clientX;hLY=e.touches[0].clientY;},{passive:true});
-  window.addEventListener('touchmove',e=>{if(!hDrag)return;hRy+=(e.touches[0].clientX-hLX)*0.6;hRx+=(e.touches[0].clientY-hLY)*0.4;hVx=(e.touches[0].clientX-hLX)*0.6;hLX=e.touches[0].clientX;hLY=e.touches[0].clientY;},{passive:true});
-  window.addEventListener('touchend',()=>hDrag=false);
+  c.addEventListener('touchstart',e=>{e.preventDefault();hDrag=true;hLX=e.touches[0].clientX;hLY=e.touches[0].clientY;},{passive:false});
+  c.addEventListener('touchmove',e=>{if(!hDrag)return;e.preventDefault();hRy+=(e.touches[0].clientX-hLX)*0.6;hRx+=(e.touches[0].clientY-hLY)*0.4;hVx=(e.touches[0].clientX-hLX)*0.6;hLX=e.touches[0].clientX;hLY=e.touches[0].clientY;},{passive:false});
+  c.addEventListener('touchend',()=>hDrag=false);
   
   // Second canvas
   const c2=document.getElementById('heroCanvas2');if(!c2)return;
@@ -2399,9 +2400,9 @@ function initHero(){
   c2.addEventListener('mousedown',e=>{h2Drag=true;h2LX=e.clientX;h2LY=e.clientY;});
   window.addEventListener('mousemove',e=>{if(!h2Drag)return;h2Ry+=(e.clientX-h2LX)*0.6;h2Rx+=(e.clientY-h2LY)*0.4;h2Vx=(e.clientX-h2LX)*0.6;h2LX=e.clientX;h2LY=e.clientY;});
   window.addEventListener('mouseup',()=>h2Drag=false);
-  c2.addEventListener('touchstart',e=>{h2Drag=true;h2LX=e.touches[0].clientX;h2LY=e.touches[0].clientY;},{passive:true});
-  window.addEventListener('touchmove',e=>{if(!h2Drag)return;h2Ry+=(e.touches[0].clientX-h2LX)*0.6;h2Rx+=(e.touches[0].clientY-h2LY)*0.4;h2Vx=(e.touches[0].clientX-h2LX)*0.6;h2LX=e.touches[0].clientX;h2LY=e.touches[0].clientY;},{passive:true});
-  window.addEventListener('touchend',()=>h2Drag=false);
+  c2.addEventListener('touchstart',e=>{e.preventDefault();h2Drag=true;h2LX=e.touches[0].clientX;h2LY=e.touches[0].clientY;},{passive:false});
+  c2.addEventListener('touchmove',e=>{if(!h2Drag)return;e.preventDefault();h2Ry+=(e.touches[0].clientX-h2LX)*0.6;h2Rx+=(e.touches[0].clientY-h2LY)*0.4;h2Vx=(e.touches[0].clientX-h2LX)*0.6;h2LX=e.touches[0].clientX;h2LY=e.touches[0].clientY;},{passive:false});
+  c2.addEventListener('touchend',()=>h2Drag=false);
 }
 
 function heroLoop(){
@@ -2914,13 +2915,13 @@ function buildBiExampleCard(ex){
     vx2=dx*0.55;lx2=e.clientX;ly2=e.clientY;
   });
   window.addEventListener('mouseup',()=>{dragging=false;canvas.style.cursor='grab';});
-  canvas.addEventListener('touchstart',e=>{dragging=true;lx2=e.touches[0].clientX;ly2=e.touches[0].clientY;},{passive:true});
-  window.addEventListener('touchmove',e=>{
-    if(!dragging)return;const dx=e.touches[0].clientX-lx2,dy=e.touches[0].clientY-ly2;
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();dragging=true;lx2=e.touches[0].clientX;ly2=e.touches[0].clientY;},{passive:false});
+  canvas.addEventListener('touchmove',e=>{
+    if(!dragging)return;e.preventDefault();const dx=e.touches[0].clientX-lx2,dy=e.touches[0].clientY-ly2;
     ry+=dx*0.55;if(geo!=='tet'){rx+=dy*0.45;rx=Math.max(-75,Math.min(75,rx));}
     lx2=e.touches[0].clientX;ly2=e.touches[0].clientY;
-  },{passive:true});
-  window.addEventListener('touchend',()=>{dragging=false;});
+  },{passive:false});
+  canvas.addEventListener('touchend',()=>{dragging=false;});
 
   refreshChelGrid();refreshLigGrid();refreshSaveUI();
 
@@ -3030,15 +3031,16 @@ function buildExampleStructCard(ex){
     vx=dx*0.55; lx=e.clientX;ly=e.clientY;
   });
   window.addEventListener('mouseup',()=>{dragging=false;canvas.style.cursor='grab';});
-  canvas.addEventListener('touchstart',e=>{dragging=true;moved=false;lx=e.touches[0].clientX;ly=e.touches[0].clientY;},{passive:true});
-  window.addEventListener('touchmove',e=>{
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();dragging=true;moved=false;lx=e.touches[0].clientX;ly=e.touches[0].clientY;},{passive:false});
+  canvas.addEventListener('touchmove',e=>{
     if(!dragging)return;
+    e.preventDefault();
     const dx=e.touches[0].clientX-lx,dy=e.touches[0].clientY-ly;
     if(Math.abs(dx)>3||Math.abs(dy)>3)moved=true;
     ry+=dx*0.55;if(ex.geo!=='tet'){rx+=dy*0.45;rx=Math.max(-75,Math.min(75,rx));}
     vx=dx*0.55;lx=e.touches[0].clientX;ly=e.touches[0].clientY;
-  },{passive:true});
-  window.addEventListener('touchend',()=>{dragging=false;});
+  },{passive:false});
+  canvas.addEventListener('touchend',()=>{dragging=false;});
 
   function start(){resize();loop();}
   function stop(){if(rafId)cancelAnimationFrame(rafId);rafId=null;}
@@ -3826,7 +3828,7 @@ class BiOctController{
       }
       this.dragging=false;this.moved=false;c.style.cursor='grab';
     });
-    c.addEventListener('touchstart',e=>{this.dragging=true;this.moved=false;this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:true});
+    c.addEventListener('touchstart',e=>{e.preventDefault();this.dragging=true;this.moved=false;this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:false});
     window.addEventListener('touchmove',e=>{
       if(!this.dragging)return;
       const dx=e.touches[0].clientX-this.lx,dy=e.touches[0].clientY-this.ly;
@@ -3982,8 +3984,8 @@ const OCT_BI_GROUPS=[
     isomers:[
       {id:'bi_maa2_ab_trans',label:'trans (O.Inactive)',oa:false,gi:2,ep:0,ti:2,
         ligs:['a','b','A','A','A','A'],chelates:[[2,4,'AA'],[3,5,'AA']],ry:20,rx:25,defaultPosVerts:[0,1],defaultPosMode:'throughM'},
-      {id:'bi_maa2_ab_cis',label:'cis (O.Active)',oa:true,gi:2,ep:1,ti:3,
-        ligs:['A','a','A','A','A','b'],chelates:[[2,4,'AA'],[0,3,'AA']],ry:25,rx:20,defaultPosVerts:[2,4,3],defaultPosMode:'3vtx',
+      {id:'bi_maa2_ab_cis',label:'cis (O.Active)',oa:true,gi:0,ep:0,ti:1,
+        ligs:['A','a','A','A','A','b'],chelates:[[2,4,'AA'],[0,3,'AA']],ry:25,rx:20,defaultPosVerts:[],defaultPosMode:'3vtx',
         examples:[
           {formula:'cis-[Cr(ox)₂ClBr]³⁻',note:'2 ox bidentate + Cl + Br cis → O.Active',geo:'oct',
            ligands:['ox','Cl','ox','ox','ox','Br'],chelates:[[2,4,'AA'],[0,3,'AA']],ry:25,rx:20}
@@ -4357,7 +4359,7 @@ class OctBiController{
       this.vx=dx*0.03;this.vy=dy*0.03;this.lx=e.clientX;this.ly=e.clientY;
     });
     window.addEventListener('mouseup',()=>{this.dragging=false;this.moved=false;c.style.cursor='grab';});
-    c.addEventListener('touchstart',e=>{this.dragging=true;this.moved=false;this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:true});
+    c.addEventListener('touchstart',e=>{e.preventDefault();this.dragging=true;this.moved=false;this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:false});
     window.addEventListener('touchmove',e=>{
       if(!this.dragging)return;
       const dx=e.touches[0].clientX-this.lx,dy=e.touches[0].clientY-this.ly;
@@ -4873,7 +4875,7 @@ class BiGeoController{
       }
       this.dragging=false;this.moved=false;c.style.cursor='grab';
     });
-    c.addEventListener('touchstart',e=>{this.dragging=true;this.moved=false;this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:true});
+    c.addEventListener('touchstart',e=>{e.preventDefault();this.dragging=true;this.moved=false;this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:false});
     window.addEventListener('touchmove',e=>{
       if(!this.dragging)return;
       const dx=e.touches[0].clientX-this.lx,dy=e.touches[0].clientY-this.ly;
@@ -5320,7 +5322,7 @@ class TetBiController{
       this.ry+=dx*0.55;this.vx=dx*0.03;this.lx=e.clientX;this.ly=e.clientY;
     });
     window.addEventListener('mouseup',()=>{this.dragging=false;this.moved=false;c.style.cursor='grab';});
-    c.addEventListener('touchstart',e=>{this.dragging=true;this.moved=false;this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:true});
+    c.addEventListener('touchstart',e=>{e.preventDefault();this.dragging=true;this.moved=false;this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:false});
     window.addEventListener('touchmove',e=>{
       if(!this.dragging)return;
       const dx=e.touches[0].clientX-this.lx;
@@ -5576,8 +5578,8 @@ class SqpBiController{
     c.addEventListener('mousedown',e=>{this.dragging=true;this.moved=false;this.lx=e.clientX;this.ly=e.clientY;c.style.cursor='grabbing';});
     window.addEventListener('mousemove',e=>{if(!this.dragging)return;const dx=e.clientX-this.lx,dy=e.clientY-this.ly;if(Math.abs(dx)>2||Math.abs(dy)>2)this.moved=true;this.ry+=dx*0.55;this.rx+=dy*0.45;this.rx=Math.max(-75,Math.min(75,this.rx));this.lx=e.clientX;this.ly=e.clientY;});
     window.addEventListener('mouseup',()=>{this.dragging=false;this.moved=false;c.style.cursor='grab';});
-    c.addEventListener('touchstart',e=>{this.dragging=true;this.moved=false;this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:true});
-    window.addEventListener('touchmove',e=>{if(!this.dragging)return;const dx=e.touches[0].clientX-this.lx,dy=e.touches[0].clientY-this.ly;if(Math.abs(dx)>3||Math.abs(dy)>3)this.moved=true;this.ry+=dx*0.55;this.rx+=dy*0.45;this.rx=Math.max(-75,Math.min(75,this.rx));this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:true});
+    c.addEventListener('touchstart',e=>{e.preventDefault();this.dragging=true;this.moved=false;this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:false});
+    c.addEventListener('touchmove',e=>{if(!this.dragging)return;e.preventDefault();const dx=e.touches[0].clientX-this.lx,dy=e.touches[0].clientY-this.ly;if(Math.abs(dx)>3||Math.abs(dy)>3)this.moved=true;this.ry+=dx*0.55;this.rx+=dy*0.45;this.rx=Math.max(-75,Math.min(75,this.rx));this.lx=e.touches[0].clientX;this.ly=e.touches[0].clientY;},{passive:false});
     window.addEventListener('touchend',()=>{this.dragging=false;this.moved=false;});
   }
 

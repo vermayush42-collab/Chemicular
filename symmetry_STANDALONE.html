@@ -818,15 +818,17 @@ function initTetDrag(id){
     drawFns[id]&&drawFns[id]();
   });
   window.addEventListener('mouseup',()=>{c._drag=false;});
-  c.addEventListener('touchstart',e=>{c._drag=true;c._lx=e.touches[0].clientX;c._ly=e.touches[0].clientY;},{passive:true});
-  window.addEventListener('touchmove',e=>{
+  c.addEventListener('touchstart',e=>{e.preventDefault();c._drag=true;c._lx=e.touches[0].clientX;c._ly=e.touches[0].clientY;},{passive:false});
+  c.addEventListener('touchmove',e=>{
     if(!c._drag)return;
+    e.preventDefault();
     tetRot[id].ry+=(e.touches[0].clientX-c._lx)*0.7;
     tetRot[id].rx+=(e.touches[0].clientY-c._ly)*0.5;
     tetRot[id].rx=Math.max(-85,Math.min(85,tetRot[id].rx));
     c._lx=e.touches[0].clientX;c._ly=e.touches[0].clientY;
     drawFns[id]&&drawFns[id]();
-  },{passive:true});
+  },{passive:false});
+  c.addEventListener('touchend',()=>{c._drag=false;});
 }
 drawFns.ch4=()=>drawTet3D('ch4',['H','H','H','H'],null,[0,1]);
 drawFns.ch3cl=()=>drawTet3D('ch3cl',['Cl','H','H','H'],null,[0,1]);
@@ -855,9 +857,10 @@ function initCycDrag(id){
     drawFns[id]&&drawFns[id]();
   });
   window.addEventListener('mouseup',()=>{c._drag=false;});
-  c.addEventListener('touchstart',e=>{c._drag=true;c._lx=e.touches[0].clientX;c._ly=e.touches[0].clientY;},{passive:true});
-  window.addEventListener('touchmove',e=>{
+  c.addEventListener('touchstart',e=>{e.preventDefault();c._drag=true;c._lx=e.touches[0].clientX;c._ly=e.touches[0].clientY;},{passive:false});
+  c.addEventListener('touchmove',e=>{
     if(!c._drag)return;
+    e.preventDefault();
     cycRot[id].ry+=(e.touches[0].clientX-c._lx)*0.7;
     cycRot[id].rx+=(e.touches[0].clientY-c._ly)*0.5;
     const is3ring=(id==='13dimethylcb'||id==='cis123tcp'||id==='cis13emcp');
@@ -868,7 +871,8 @@ function initCycDrag(id){
     }
     c._lx=e.touches[0].clientX;c._ly=e.touches[0].clientY;
     drawFns[id]&&drawFns[id]();
-  },{passive:true});
+  },{passive:false});
+  c.addEventListener('touchend',()=>{c._drag=false;});
 }
 
 function proj3D(p,rx,ry,cx,cy){
@@ -1615,6 +1619,19 @@ function initAlleneDrag(id){
     drawFns[id]&&drawFns[id]();
   });
   window.addEventListener('mouseup',()=>c._d=0);
+  
+  // Touch events for mobile
+  c.addEventListener('touchstart',e=>{e.preventDefault();c._d=1;c._lx=e.touches[0].clientX;c._ly=e.touches[0].clientY;},{passive:false});
+  c.addEventListener('touchmove',e=>{
+    if(!c._d)return;
+    e.preventDefault();
+    alleneRot[id].ry+=(e.touches[0].clientX-c._lx)*0.4;
+    alleneRot[id].rx+=(e.touches[0].clientY-c._ly)*0.4;
+    alleneRot[id].rx=Math.max(-60,Math.min(60,alleneRot[id].rx));
+    c._lx=e.touches[0].clientX;c._ly=e.touches[0].clientY;
+    drawFns[id]&&drawFns[id]();
+  },{passive:false});
+  c.addEventListener('touchend',()=>c._d=0);
 }
 
 ['allene1','allene2','allene3','allene4','allene5','allene6'].forEach(id=>{

@@ -957,7 +957,7 @@ footer{background:var(--ink);color:rgba(245,242,236,0.5);padding:56px max(24px,5
   </div>
   
   <div class="reveal" style="background:var(--cream);border:2px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,14,12,0.08);">
-    <iframe src="symmetry_STANDALONE.html" style="width:100%;height:80vh;border:none;display:block;"></iframe>
+    <iframe src="symmetry_STANDALONE.html?v=1778335728" style="width:100%;height:80vh;border:none;display:block;"></iframe>
   </div>
 </section>
 
@@ -1670,7 +1670,7 @@ const BAKED_STATES={
   "chemicular_squareplanar_states":{"sma2b2c":{"ligs":["B","A","B","A"],"showPOS":false,"posVerts":[],"posMode":"3vtx"},"sma2b2t":{"ligs":["B","B","A","A"],"showPOS":false,"posVerts":[],"posMode":"3vtx"},"sma2bcc":{"ligs":["C","A","B","A"],"showPOS":false,"posVerts":[],"posMode":"3vtx"},"sma2bct":{"ligs":["C","B","A","A"],"showPOS":false,"posVerts":[],"posMode":"3vtx"},"smabcd1":{"ligs":["A","B","C","D"],"showPOS":false,"posVerts":[],"posMode":"3vtx"},"smabcd2":{"ligs":["A","C","D","B"],"showPOS":false,"posVerts":[],"posMode":"3vtx"},"smabcd3":{"ligs":["A","D","B","C"],"showPOS":false,"posVerts":[],"posMode":"3vtx"}},
   "chemicular_bi_oct_bi_maa_a4":{"ligs":["a","a","A","a","A","a"],"showPOS":true,"posVerts":[2,3,5],"posMode":"3vtx"},
   "chemicular_bi_oct_bi_maa_a3b_1":{"ligs":["a","a","A","a","A","b"],"showPOS":true,"posVerts":[2,3,5],"posMode":"3vtx"},
-  "chemicular_bi_oct_bi_maa_a3b_2":{"ligs":["a","b","A","a","A","a"],"chelates":[[2,4,"AA"]],"showPOS":true,"posVerts":[2,3,4],"posMode":"3vtx"},
+  "chemicular_bi_oct_bi_maa_a3b_2":{"ligs":["a","b","A","a","A","a"],"chelates":[[2,4,"AA"]],"showPOS":false,"posVerts":[],"posMode":"3vtx"},
   "chemicular_bi_oct_bi_maa_a2b2_1":{"ligs":["b","b","A","a","A","a"],"showPOS":true,"posVerts":[2,3,5],"posMode":"3vtx"},
   "chemicular_bi_oct_bi_maa_a2b2_2":{"ligs":["a","a","A","b","A","b"],"showPOS":true,"posVerts":[2,3,5],"posMode":"3vtx"},
   "chemicular_bi_oct_bi_maa_a2b2_3":{"ligs":["b","a","A","a","A","b"],"showPOS":false,"posVerts":[],"posMode":"3vtx"},
@@ -3932,8 +3932,8 @@ const OCT_BI_GROUPS=[
     isomers:[
       {id:'bi_maa_a3b_1',label:'trans-b (O.Inactive)',oa:false,gi:2,ep:0,ti:2,
         ligs:['b','a','A','a','A','a'],chelates:[[2,4,'AA']],ry:20,rx:25,defaultPosVerts:[0,1],defaultPosMode:'throughM'},
-      {id:'bi_maa_a3b_2',label:'cis-b (O.Inactive)',oa:false,gi:2,ep:0,ti:2,
-        ligs:['a','a','A','b','A','a'],chelates:[[2,4,'AA']],ry:20,rx:25,defaultPosVerts:[0,2,4],defaultPosMode:'3vtx'}
+      {id:'bi_maa_a3b_2',label:'cis-b (O.Active)',oa:true,gi:0,ep:0,ti:1,
+        ligs:['a','a','A','b','A','a'],chelates:[[2,4,'AA']],ry:20,rx:25,defaultPosVerts:[],defaultPosMode:'3vtx'}
     ]
   },
   {

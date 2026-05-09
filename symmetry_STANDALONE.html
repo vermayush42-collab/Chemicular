@@ -1,0 +1,2488 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0f0e0c;--paper:#f5f2ec;--cream:#ede9e0;--accent:#c84b2f;--teal:#1a6b5a;--muted:#6b6660;--border:rgba(15,14,12,0.12);--serif:'Playfair Display',serif;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);padding:40px 32px;}
+/* Header */
+.page-hdr{margin-bottom:48px;}
+.page-hdr h1{font-family:var(--serif);font-size:2.4rem;font-weight:700;margin-bottom:6px;}
+.page-hdr h1 em{font-style:italic;color:var(--accent);}
+.page-hdr p{color:var(--muted);font-size:0.9rem;max-width:560px;line-height:1.8;}
+/* Group section */
+.group{margin-bottom:56px;}
+.group-hdr{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:12px;border-bottom:2px solid var(--border);}
+.group-num{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.72rem;font-weight:600;flex-shrink:0;}
+.group-title{font-family:var(--serif);font-size:1.5rem;font-weight:700;}
+.group-sub{color:var(--muted);font-size:0.82rem;margin-left:46px;margin-top:-16px;margin-bottom:20px;line-height:1.7;}
+/* Cards grid */
+.cards{display:flex;flex-wrap:wrap;gap:20px;}
+.card{background:var(--cream);border:1px solid var(--border);border-radius:12px;overflow:hidden;width:240px;flex-shrink:0;}
+.card.wide{width:300px;}
+.card-top{padding:8px 12px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:0.65rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center;}
+.card-top strong{font-family:var(--serif);font-size:0.9rem;letter-spacing:0;color:var(--ink);}
+.no-pos-badge{background:rgba(200,75,47,0.1);color:var(--accent);font-family:var(--mono);font-size:0.6rem;padding:2px 7px;border-radius:10px;font-weight:600;}
+.pos-badge{background:rgba(26,107,90,0.1);color:var(--teal);font-family:var(--mono);font-size:0.6rem;padding:2px 7px;border-radius:10px;font-weight:600;}
+.cos-badge{background:rgba(138,43,226,0.1);color:#7a2daa;font-family:var(--mono);font-size:0.6rem;padding:2px 7px;border-radius:10px;font-weight:600;margin-left:4px;}
+canvas{display:block;}
+.card-ctrl{padding:7px 10px;border-top:1px solid var(--border);display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+button.tbtn{padding:3px 10px;border-radius:14px;border:1px solid var(--border);background:transparent;font-family:var(--mono);font-size:0.62rem;cursor:pointer;color:var(--muted);transition:all .15s;}
+button.tbtn.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+button.tbtn.cos{border-color:#7a2daa;color:#7a2daa;}
+button.tbtn.cos.on{background:#7a2daa;color:var(--paper);border-color:#7a2daa;}
+.card-foot{padding:5px 10px;font-family:var(--mono);font-size:0.62rem;color:var(--muted);text-align:center;border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<div class="page-hdr">
+  <h1>Symmetry Elements — <em>POS Repository</em></h1>
+  <p>Interactive 3D structures showing Planes of Symmetry (POS). Toggle POS on/off for each molecule. Drag to rotate 3D structures.</p>
+</div>
+
+<!-- ═══ GROUP 1: BENZENE ═══ -->
+<div class="group">
+  <div class="group-hdr"><div class="group-num">1</div><div class="group-title">Benzene &amp; Derivatives</div></div>
+  <p class="group-sub">Planar molecules — molecular plane is always a POS. Additional vertical planes through substituents.</p>
+  <div class="cards">
+    <div class="card" id="card-benzene">
+      <div class="card-top"><strong>Benzene</strong><span class="pos-badge">POS ✓</span><span class="cos-badge">COS ✓</span></div>
+      <canvas id="c-benzene" style="width:240px;height:220px;"></canvas>
+      <div class="card-ctrl">
+        <button class="tbtn on" onclick="togglePOS('benzene')">Hide POS</button>
+        <button class="tbtn cos" onclick="toggleCOS('benzene')">Show COS</button>
+      </div>
+      <div class="card-foot">Molecular plane + 6 vertical planes / COS at center</div>
+    </div>
+    <div class="card" id="card-benz1cl">
+      <div class="card-top"><strong>Chlorobenzene</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-benz1cl" style="width:240px;height:220px;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('benz1cl')">Hide POS</button></div>
+      <div class="card-foot">1 vertical POS through Cl–C1–C4</div>
+    </div>
+    <div class="card" id="card-benz12cl">
+      <div class="card-top"><strong>1,2-Dichlorobenzene</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-benz12cl" style="width:240px;height:220px;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('benz12cl')">Hide POS</button></div>
+      <div class="card-foot">1 vertical POS bisecting Cl–Cl</div>
+    </div>
+    <div class="card" id="card-benz13cl">
+      <div class="card-top"><strong>1,3-Dichlorobenzene</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-benz13cl" style="width:240px;height:220px;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('benz13cl')">Hide POS</button></div>
+      <div class="card-foot">1 vertical POS through C2–C5</div>
+    </div>
+    <div class="card" id="card-benz14cl">
+      <div class="card-top"><strong>1,4-Dichlorobenzene</strong><span class="pos-badge">POS ✓</span><span class="cos-badge">COS ✓</span></div>
+      <canvas id="c-benz14cl" style="width:240px;height:220px;"></canvas>
+      <div class="card-ctrl">
+        <button class="tbtn on" onclick="togglePOS('benz14cl')">Hide POS</button>
+        <button class="tbtn cos" onclick="toggleCOS('benz14cl')">Show COS</button>
+      </div>
+      <div class="card-foot">1 vertical POS through Cl–Cl axis / COS at center</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GROUP 2: OPEN CHAIN (tetrahedral C) ═══ -->
+<div class="group">
+  <div class="group-hdr"><div class="group-num">2</div><div class="group-title">Open Chain — Tetrahedral Carbon</div></div>
+  <p class="group-sub">POS passes through atoms in the same plane. Molecules with all-same or paired substituents have POS.</p>
+  <div class="cards">
+    <div class="card" id="card-ch4">
+      <div class="card-top"><strong>CH₄</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-ch4" style="width:240px;height:240px;cursor:grab;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('ch4')">Hide POS</button></div>
+      <div class="card-foot">POS through H–C–H (6 planes total)</div>
+    </div>
+    <div class="card" id="card-ch3cl">
+      <div class="card-top"><strong>CH₃Cl</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-ch3cl" style="width:240px;height:240px;cursor:grab;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('ch3cl')">Hide POS</button></div>
+      <div class="card-foot">POS through Cl–C–H (3 planes)</div>
+    </div>
+    <div class="card" id="card-ch2cl2">
+      <div class="card-top"><strong>CH₂Cl₂</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-ch2cl2" style="width:240px;height:240px;cursor:grab;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('ch2cl2')">Hide POS</button></div>
+      <div class="card-foot">2 POS: Cl–C–Cl and H–C–H planes</div>
+    </div>
+    <div class="card" id="card-chcl3">
+      <div class="card-top"><strong>CHCl₃</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-chcl3" style="width:240px;height:240px;cursor:grab;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('chcl3')">Hide POS</button></div>
+      <div class="card-foot">POS through H–C–Cl (3 planes)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GROUP 3: ALLENE SYSTEM ═══ -->
+<div class="group">
+  <div class="group-hdr"><div class="group-num">3</div><div class="group-title">Allene System (C=C=C)</div></div>
+  <p class="group-sub">Linear cumulated dienes with perpendicular π-bond planes. Symmetry depends on substituent arrangement on terminal carbons.</p>
+  <div class="cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+    <div class="card" id="card-allene1" style="min-width:440px;">
+      <div class="card-top"><strong>a-a-C=C=C-a-a</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-allene1" style="width:420px;height:240px;cursor:grab;display:block;margin:0 auto;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('allene1')">Hide POS</button></div>
+      <div class="card-foot">All same → POS (blue plane) → Achiral</div>
+    </div>
+    <div class="card" id="card-allene2" style="min-width:440px;">
+      <div class="card-top"><strong>a-a-C=C=C-b-b</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-allene2" style="width:420px;height:240px;cursor:grab;display:block;margin:0 auto;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('allene2')">Hide POS</button></div>
+      <div class="card-foot">Blue: a,a | Green: b,b → POS → Achiral</div>
+    </div>
+    <div class="card" id="card-allene3" style="min-width:440px;">
+      <div class="card-top"><strong>a-b-C=C=C-a-b</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-allene3" style="width:420px;height:240px;cursor:grab;display:block;margin:0 auto;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('allene3')">Hide POS</button></div>
+      <div class="card-foot">Mirror diagonal → POS (blue) → Achiral</div>
+    </div>
+    <div class="card" id="card-allene4" style="min-width:440px;">
+      <div class="card-top"><strong>a-a-C=C=C-a-b</strong><span class="no-pos-badge">No POS</span></div>
+      <canvas id="c-allene4" style="width:420px;height:240px;cursor:grab;display:block;margin:0 auto;"></canvas>
+      <div class="card-ctrl"><button class="tbtn" style="opacity:0.4;cursor:default;">No POS</button></div>
+      <div class="card-foot">Three a, one b → No POS → Chiral</div>
+    </div>
+    <div class="card" id="card-allene5" style="min-width:440px;">
+      <div class="card-top"><strong>a-b-C=C=C-a-c</strong><span class="no-pos-badge">No POS</span></div>
+      <canvas id="c-allene5" style="width:420px;height:240px;cursor:grab;display:block;margin:0 auto;"></canvas>
+      <div class="card-ctrl"><button class="tbtn" style="opacity:0.4;cursor:default;">No POS</button></div>
+      <div class="card-foot">a,b | a,c → No POS → Chiral</div>
+    </div>
+    <div class="card" id="card-allene6" style="min-width:440px;">
+      <div class="card-top"><strong>a-b-C=C=C-c-d</strong><span class="no-pos-badge">No POS</span></div>
+      <canvas id="c-allene6" style="width:420px;height:240px;cursor:grab;display:block;margin:0 auto;"></canvas>
+      <div class="card-ctrl"><button class="tbtn" style="opacity:0.4;cursor:default;">No POS</button></div>
+      <div class="card-foot">All different → No POS → Chiral</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GROUP 4: CYCLIC WITH POS ═══ -->
+<div class="group">
+  <div class="group-hdr"><div class="group-num">4</div><div class="group-title">Cyclic Compounds — With POS</div></div>
+  <p class="group-sub">Cyclopentane and cyclopropane derivatives where substituents create a plane of symmetry.</p>
+  <div class="cards">
+    <div class="card wide" id="card-13dimethylcb">
+      <div class="card-top"><strong>cis-1,3-Dimethylcyclobutane</strong><span class="pos-badge">POS ✓</span><span class="cos-badge">COS ✓</span></div>
+      <canvas id="c-13dimethylcb" style="width:300px;height:260px;cursor:grab;"></canvas>
+      <div class="card-ctrl">
+        <button class="tbtn on" onclick="togglePOS('13dimethylcb')">Hide POS</button>
+        <button class="tbtn cos" onclick="toggleCOS('13dimethylcb')">Show COS</button>
+      </div>
+      <div class="card-foot">POS through C1–C3 axis / COS at ring center</div>
+    </div>
+    <div class="card wide" id="card-cis12mcp">
+      <div class="card-top"><strong>cis-1,3-Dimethylcyclopentane</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-cis12mcp" style="width:300px;height:260px;cursor:grab;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('cis12mcp')">Hide POS</button></div>
+      <div class="card-foot">POS through C2 — bisects C1 and C3</div>
+    </div>
+    <div class="card wide" id="card-trans13mcp">
+      <div class="card-top"><strong>trans-1,3-Dimethylcyclopentane</strong><span class="no-pos-badge">No POS</span></div>
+      <canvas id="c-trans13mcp" style="width:300px;height:260px;cursor:grab;"></canvas>
+      <div class="card-ctrl"><button class="tbtn" style="opacity:0.4;cursor:default;">No POS</button></div>
+      <div class="card-foot">CH₃ on opposite sides → No POS</div>
+    </div>
+    <div class="card wide" id="card-cis14dcch">
+      <div class="card-top"><strong>cis-2,5-Dichloro-1,4-dioxane</strong><span class="no-pos-badge">No POS</span></div>
+      <canvas id="c-cis14dcch" style="width:300px;height:260px;cursor:grab;"></canvas>
+      <div class="card-ctrl"><button class="tbtn" style="opacity:0.4;cursor:default;">No POS</button></div>
+      <div class="card-foot">O atoms break symmetry → No POS</div>
+    </div>
+    <div class="card wide" id="card-trans14dcch">
+      <div class="card-top"><strong>trans-2,5-Dichloro-1,4-dioxane</strong><span class="cos-badge">COS ✓</span></div>
+      <canvas id="c-trans14dcch" style="width:300px;height:260px;cursor:grab;"></canvas>
+      <div class="card-ctrl"><button class="tbtn cos" onclick="toggleCOS('trans14dcch')">Show COS</button></div>
+      <div class="card-foot">No POS but has COS at ring center</div>
+    </div>
+    <div class="card wide" id="card-cis123tcp">
+      <div class="card-top"><strong>cis-1,2,3-Trimethylcyclopropane</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-cis123tcp" style="width:300px;height:260px;cursor:grab;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('cis123tcp')">Hide POS</button></div>
+      <div class="card-foot">POS through C2 methyl (vertical)</div>
+    </div>
+    <div class="card wide" id="card-cis13emcp">
+      <div class="card-top"><strong>cis-1-Ethyl-3-methylcyclopropane</strong><span class="no-pos-badge">No POS</span></div>
+      <canvas id="c-cis13emcp" style="width:300px;height:260px;cursor:grab;"></canvas>
+      <div class="card-ctrl"><button class="tbtn" style="opacity:0.4;cursor:default;">No POS</button></div>
+      <div class="card-foot">Et ≠ Me → No POS</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GROUP 5: BIPHENYL CONFORMATIONS ═══ -->
+<div class="group">
+  <div class="group-hdr"><div class="group-num">5</div><div class="group-title">Biphenyl Conformations</div></div>
+  <p class="group-sub">Two benzene rings connected by C–C single bond. Free rotation creates different conformations with different symmetry.</p>
+  <div class="cards">
+    <div class="card" id="card-biphenyl-planar" style="min-width:640px;">
+      <div class="card-top"><strong>Biphenyl (when atoms are small)</strong><span class="pos-badge">POS ✓</span></div>
+      <canvas id="c-biphenyl-planar" style="width:620px;height:320px;cursor:grab;display:block;margin:0 auto;"></canvas>
+      <div class="card-ctrl"><button class="tbtn on" onclick="togglePOS('biphenyl-planar')">Hide POS</button></div>
+      <div class="card-foot">Coplanar rings in molecular plane</div>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="card" id="card-biphenyl-perp" style="min-width:640px;">
+      <div class="card-top"><strong>Biphenyl (when atoms are large)</strong></div>
+      <canvas id="c-biphenyl-perp" style="width:620px;height:320px;cursor:grab;display:block;margin:0 auto;"></canvas>
+      <div class="card-foot">90° dihedral angle between rings</div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+const DPR=Math.min(window.devicePixelRatio||1,2);
+// Track POS and COS state per molecule
+const posState={};
+const cosState={};
+
+function setupCanvas(id,w,h){
+  const c=document.getElementById('c-'+id);
+  if(!c)return null;
+  c.width=w*DPR; c.height=h*DPR;
+  c.style.width=w+'px'; c.style.height=h+'px';
+  posState[id]=true;
+  cosState[id]=false; // COS starts hidden
+  return c;
+}
+
+function togglePOS(id){
+  posState[id]=!posState[id];
+  if(posState[id]) cosState[id]=false; // Hide COS when showing POS
+  const btn=document.querySelector(`#card-${id} .tbtn:not(.cos)`);
+  if(btn){btn.textContent=posState[id]?'Hide POS':'Show POS';btn.classList.toggle('on',posState[id]);}
+  drawFns[id]&&drawFns[id]();
+}
+
+function toggleCOS(id){
+  cosState[id]=!cosState[id];
+  if(cosState[id]) posState[id]=false; // Hide POS when showing COS
+  const btn=document.querySelector(`#card-${id} .tbtn.cos`);
+  if(btn){btn.textContent=cosState[id]?'Hide COS':'Show COS';btn.classList.toggle('on',cosState[id]);}
+  drawFns[id]&&drawFns[id]();
+}
+
+// ── Shared helpers ──────────────────────────────────────────────────
+function solidWedge(ctx,x1,y1,x2,y2,w){
+  const dx=x2-x1,dy=y2-y1,l=Math.sqrt(dx*dx+dy*dy)||1;
+  const nx=-dy/l,ny=dx/l;
+  ctx.save(); ctx.beginPath();
+  ctx.moveTo(x1,y1);
+  ctx.lineTo(x2+nx*w/2,y2+ny*w/2);
+  ctx.lineTo(x2-nx*w/2,y2-ny*w/2);
+  ctx.closePath();
+  ctx.fillStyle='rgba(15,14,12,0.85)'; ctx.fill(); ctx.restore();
+}
+function dashWedge(ctx,x1,y1,x2,y2,w){
+  const dx=x2-x1,dy=y2-y1,l=Math.sqrt(dx*dx+dy*dy)||1;
+  const nx=-dy/l,ny=dx/l; const n=7;
+  ctx.save();
+  for(let i=1;i<=n;i++){
+    const t=i/n,px=x1+dx*t,py=y1+dy*t,hw=w/2*t;
+    ctx.beginPath(); ctx.moveTo(px-nx*hw,py-ny*hw); ctx.lineTo(px+nx*hw,py+ny*hw);
+    ctx.strokeStyle=`rgba(15,14,12,${0.35+t*0.55})`; ctx.lineWidth=2; ctx.stroke();
+  }
+  ctx.restore();
+}
+function line(ctx,x1,y1,x2,y2,w,col){
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
+  ctx.strokeStyle=col||'rgba(15,14,12,0.8)'; ctx.lineWidth=w||2.2; ctx.lineCap='round'; ctx.stroke();
+}
+function atomBall(ctx,x,y,r,col,lbl,fs){
+  const n=parseInt(col.replace('#',''),16);
+  const [R,G,B]=[(n>>16)&255,(n>>8)&255,n&255];
+  const g=ctx.createRadialGradient(x-r*.32,y-r*.35,1,x,y,r);
+  g.addColorStop(0,`rgb(${Math.min(255,R+85)},${Math.min(255,G+85)},${Math.min(255,B+85)})`);
+  g.addColorStop(.55,col);
+  g.addColorStop(1,`rgb(${Math.max(0,R-55)},${Math.max(0,G-55)},${Math.max(0,B-55)})`);
+  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.fillStyle=g; ctx.fill();
+  ctx.strokeStyle='rgba(0,0,0,0.12)'; ctx.lineWidth=1; ctx.stroke();
+  const sg=ctx.createRadialGradient(x-r*.28,y-r*.28,0,x,y,r*.65);
+  sg.addColorStop(0,'rgba(255,255,255,.42)'); sg.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle=sg; ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.92)';
+  ctx.font=`700 ${fs||Math.max(8,r*.58)}px 'DM Mono',monospace`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.shadowColor='rgba(0,0,0,.35)'; ctx.shadowBlur=2;
+  ctx.fillText(lbl,x,y); ctx.shadowBlur=0;
+}
+function posPlane(ctx,x1,y1,x2,y2,pw,label){
+  // Draw POS as a band perpendicular to the line
+  const dx=x2-x1,dy=y2-y1,l=Math.sqrt(dx*dx+dy*dy)||1;
+  const nx=-dy/l,ny=dx/l; // perpendicular
+  // Band extends 'pw' each side perpendicular
+  const ext=18;
+  const ax=x1-dx/l*ext, ay=y1-dy/l*ext;
+  const bx=x2+dx/l*ext, by=y2+dy/l*ext;
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(ax+nx*pw,ay+ny*pw); ctx.lineTo(bx+nx*pw,by+ny*pw);
+  ctx.lineTo(bx-nx*pw,by-ny*pw); ctx.lineTo(ax-nx*pw,ay-ny*pw);
+  ctx.closePath();
+  const pg=ctx.createLinearGradient(ax,ay,bx,by);
+  pg.addColorStop(0,'rgba(26,107,90,.04)');
+  pg.addColorStop(.5,'rgba(26,107,90,.15)');
+  pg.addColorStop(1,'rgba(26,107,90,.04)');
+  ctx.fillStyle=pg; ctx.fill();
+  ctx.setLineDash([7,4]);
+  ctx.strokeStyle='rgba(15,110,86,.6)'; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(ax+nx*pw,ay+ny*pw); ctx.lineTo(bx+nx*pw,by+ny*pw); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(ax-nx*pw,ay-ny*pw); ctx.lineTo(bx-nx*pw,by-ny*pw); ctx.stroke();
+  ctx.setLineDash([]);
+  if(label){
+    ctx.fillStyle='rgba(15,110,86,.8)'; ctx.font=`600 9px 'DM Mono',monospace`;
+    ctx.textAlign='left'; ctx.textBaseline='middle';
+    ctx.fillText('σ',bx+nx*pw+5,by+ny*pw);
+  }
+  ctx.restore();
+}
+function drawCOSArrow(ctx, fromX, fromY, toX, toY, color, lineWidth) {
+  // Draw arrow from center to atom for COS visualization
+  const dx = toX - fromX;
+  const dy = toY - fromY;
+  const angle = Math.atan2(dy, dx);
+  
+  // Draw line
+  ctx.strokeStyle = color || 'rgba(138,43,226,0.8)';
+  ctx.lineWidth = lineWidth || 2;
+  ctx.beginPath();
+  ctx.moveTo(fromX, fromY);
+  ctx.lineTo(toX, toY);
+  ctx.stroke();
+  
+  // Draw large visible arrowhead
+  const headLength = 18;
+  const headWidth = 12;
+  
+  ctx.fillStyle = color || 'rgba(138,43,226,0.8)';
+  ctx.strokeStyle = color || 'rgba(138,43,226,0.8)';
+  ctx.lineWidth = 1;
+  
+  ctx.beginPath();
+  ctx.moveTo(toX, toY);
+  ctx.lineTo(
+    toX - headLength * Math.cos(angle) - headWidth * Math.sin(angle),
+    toY - headLength * Math.sin(angle) + headWidth * Math.cos(angle)
+  );
+  ctx.lineTo(
+    toX - headLength * Math.cos(angle) + headWidth * Math.sin(angle),
+    toY - headLength * Math.sin(angle) - headWidth * Math.cos(angle)
+  );
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+}
+function posLine(ctx,x1,y1,x2,y2){
+  // Simple dashed line POS
+  ctx.save();
+  ctx.setLineDash([8,4]);
+  ctx.strokeStyle='rgba(15,110,86,.7)'; ctx.lineWidth=1.8;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+}
+function hexRing(ctx,cx,cy,R,rot){
+  // Draw hexagon ring
+  const pts=[];
+  for(let i=0;i<6;i++){
+    const a=(i*60+(rot||0))*Math.PI/180;
+    pts.push([cx+R*Math.cos(a), cy+R*Math.sin(a)]);
+  }
+  ctx.beginPath();
+  pts.forEach((p,i)=>i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]));
+  ctx.closePath();
+  ctx.strokeStyle='rgba(15,14,12,.85)'; ctx.lineWidth=2.2; ctx.stroke();
+  return pts;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DRAWING FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════
+const drawFns={};
+
+// ── Benzene ────────────────────────────────────────────────────────
+drawFns.benzene=function(){
+  const c=document.getElementById('c-benzene');
+  const ctx=c.getContext('2d'); const W=c.width/DPR,H=c.height/DPR;
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+  const cx=W/2,cy=H/2,R=72;
+  const pos=posState.benzene;
+  const cos=cosState.benzene;
+  
+  // POS or COS (mutually exclusive)
+  if(pos){
+    ctx.save();
+    const extY=28;
+    posPlane(ctx, cx, cy-R-extY, cx, cy+R+extY, 18, 'σ');
+    ctx.restore();
+  }
+  
+  const pts=hexRing(ctx,cx,cy,R,90);
+  // Inner circle (aromatic)
+  ctx.beginPath(); ctx.arc(cx,cy,R*.55,0,Math.PI*2);
+  ctx.strokeStyle='rgba(15,14,12,.4)'; ctx.lineWidth=1.5; ctx.stroke();
+  // C-H bonds + H atoms at each vertex
+  const HCOL='#378ADD';
+  pts.forEach(([x,y])=>{
+    const dx=x-cx,dy=y-cy,l=Math.sqrt(dx*dx+dy*dy);
+    const hx=x+dx/l*22,hy=y+dy/l*22;
+    line(ctx,x,y,hx,hy,1.8,'rgba(15,14,12,0.6)');
+  });
+  
+  // COS arrows to each H atom
+  if(cos){
+    const cosColor='rgba(138,43,226,0.8)';
+    pts.forEach(([x,y])=>{
+      const dx=x-cx,dy=y-cy,l=Math.sqrt(dx*dx+dy*dy);
+      const hx=x+dx/l*22,hy=y+dy/l*22;
+      drawCOSArrow(ctx,cx,cy,hx,hy,cosColor,2);
+    });
+    
+    // Center marker
+    ctx.fillStyle='rgba(138,43,226,0.15)';
+    ctx.beginPath();
+    ctx.arc(cx,cy,10,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='#7a2daa';
+    ctx.font='bold 10px monospace';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText('i',cx,cy);
+  }
+  
+  // Draw H atoms on top
+  pts.forEach(([x,y])=>{
+    const dx=x-cx,dy=y-cy,l=Math.sqrt(dx*dx+dy*dy);
+    const hx=x+dx/l*22,hy=y+dy/l*22;
+    atomBall(ctx,hx,hy,8,HCOL,'H',7);
+  });
+  
+  ctx.restore();
+};
+
+// ── Chlorobenzene ─────────────────────────────────────────────────
+drawFns.benz1cl=function(){
+  const c=document.getElementById('c-benz1cl');
+  const ctx=c.getContext('2d'); const W=c.width/DPR,H=c.height/DPR;
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+  const cx=W/2,cy=H/2+5,R=62;
+  const pos=posState.benz1cl;
+  const pts=[];
+  for(let i=0;i<6;i++){const a=(i*60+90)*Math.PI/180;pts.push([cx+R*Math.cos(a),cy+R*Math.sin(a)]);}
+  // POS: vertical line through C1 (top) and C4 (bottom)
+  if(pos){
+    // POS through Cl (above C1) and through C4 (bottom) — full vertical plane
+    const clPosX=pts[0][0]+(pts[0][0]-cx)/R*24;
+    const clPosY=pts[0][1]+(pts[0][1]-cy)/R*24;
+    const c4PosX=pts[3][0]+(pts[3][0]-cx)/R*20;
+    const c4PosY=pts[3][1]+(pts[3][1]-cy)/R*20;
+    posPlane(ctx, clPosX, clPosY, c4PosX, c4PosY, 18, 'σ');
+  }
+  hexRing(ctx,cx,cy,R,90);
+  ctx.beginPath(); ctx.arc(cx,cy,R*.55,0,Math.PI*2);
+  ctx.strokeStyle='rgba(15,14,12,.35)'; ctx.lineWidth=1.4; ctx.stroke();
+  // Draw bonds first, then atoms on top
+  pts.forEach(([x,y],i)=>{
+    const dx=x-cx,dy=y-cy,l=Math.sqrt(dx*dx+dy*dy);
+    const isCl=(i===0);
+    const dist=isCl?24:20;
+    const ax=x+dx/l*dist, ay=y+dy/l*dist;
+    line(ctx,x,y,ax,ay,1.8,'rgba(15,14,12,0.6)');
+  });
+  // Cl at top (C1)
+  const clPos=pts[0];
+  const clx=clPos[0]+(clPos[0]-cx)/R*24, cly=clPos[1]+(clPos[1]-cy)/R*24;
+  atomBall(ctx,clx,cly,13,'#1a6b5a','Cl',7);
+  // H at all other positions
+  pts.forEach(([x,y],i)=>{
+    if(i===0)return;
+    const dx=x-cx,dy=y-cy,l=Math.sqrt(dx*dx+dy*dy);
+    atomBall(ctx,x+dx/l*20,y+dy/l*20,8,'#378ADD','H',7);
+  });
+  ctx.restore();
+};
+
+// ── 1,2-Dichlorobenzene ───────────────────────────────────────────
+drawFns.benz12cl=function(){
+  const c=document.getElementById('c-benz12cl');
+  const ctx=c.getContext('2d'); const W=c.width/DPR,H=c.height/DPR;
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+  const cx=W/2,cy=H/2+5,R=62;
+  const pos=posState.benz12cl;
+  const pts=[];
+  for(let i=0;i<6;i++){const a=(i*60+90)*Math.PI/180;pts.push([cx+R*Math.cos(a),cy+R*Math.sin(a)]);}
+  // POS bisects the C1-C2 bond — passes through midpoint of C1C2 and opposite midpoint C4C5
+  if(pos){
+    const mx=(pts[0][0]+pts[1][0])/2, my=(pts[0][1]+pts[1][1])/2;
+    const ox=(pts[3][0]+pts[4][0])/2, oy=(pts[3][1]+pts[4][1])/2;
+    posPlane(ctx,mx,my,ox,oy,16,'σ');
+  }
+  hexRing(ctx,cx,cy,R,90);
+  ctx.beginPath(); ctx.arc(cx,cy,R*.55,0,Math.PI*2);
+  ctx.strokeStyle='rgba(15,14,12,.35)'; ctx.lineWidth=1.4; ctx.stroke();
+  pts.forEach(([x,y],i)=>{
+    const dx=x-cx,dy=y-cy,l=Math.sqrt(dx*dx+dy*dy);
+    const isCl=(i===0||i===1); const dist=isCl?24:20;
+    line(ctx,x,y,x+dx/l*dist,y+dy/l*dist,1.8,'rgba(15,14,12,0.6)');
+  });
+  pts.forEach(([x,y],i)=>{
+    const dx=x-cx,dy=y-cy,l=Math.sqrt(dx*dx+dy*dy);
+    const isCl=(i===0||i===1); const dist=isCl?24:20;
+    atomBall(ctx,x+dx/l*dist,y+dy/l*dist,isCl?13:8,isCl?'#1a6b5a':'#378ADD',isCl?'Cl':'H',7);
+  });
+  ctx.restore();
+};
+
+// ── 1,3-Dichlorobenzene ───────────────────────────────────────────
+drawFns.benz13cl=function(){
+  const c=document.getElementById('c-benz13cl');
+  const ctx=c.getContext('2d'); const W=c.width/DPR,H=c.height/DPR;
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+  const cx=W/2,cy=H/2+5,R=62;
+  const pos=posState.benz13cl;
+  const pts=[];
+  for(let i=0;i<6;i++){const a=(i*60+90)*Math.PI/180;pts.push([cx+R*Math.cos(a),cy+R*Math.sin(a)]);}
+  // POS through C2 (between Cl) and C5 (opposite)
+  if(pos) posPlane(ctx,pts[1][0],pts[1][1],pts[4][0],pts[4][1],16,'σ');
+  hexRing(ctx,cx,cy,R,90);
+  ctx.beginPath(); ctx.arc(cx,cy,R*.55,0,Math.PI*2);
+  ctx.strokeStyle='rgba(15,14,12,.35)'; ctx.lineWidth=1.4; ctx.stroke();
+  pts.forEach(([x,y],i)=>{
+    const dx=x-cx,dy=y-cy,l=Math.sqrt(dx*dx+dy*dy);
+    const isCl=(i===0||i===2); const dist=isCl?24:20;
+    line(ctx,x,y,x+dx/l*dist,y+dy/l*dist,1.8,'rgba(15,14,12,0.6)');
+  });
+  pts.forEach(([x,y],i)=>{
+    const dx=x-cx,dy=y-cy,l=Math.sqrt(dx*dx+dy*dy);
+    const isCl=(i===0||i===2); const dist=isCl?24:20;
+    atomBall(ctx,x+dx/l*dist,y+dy/l*dist,isCl?13:8,isCl?'#1a6b5a':'#378ADD',isCl?'Cl':'H',7);
+  });
+  ctx.restore();
+};
+
+// ── 1,4-Dichlorobenzene ───────────────────────────────────────────
+drawFns.benz14cl=function(){
+  const c=document.getElementById('c-benz14cl');
+  const ctx=c.getContext('2d'); const W=c.width/DPR,H=c.height/DPR;
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+  const cx=W/2,cy=H/2+5,R=62;
+  const pos=posState.benz14cl;
+  const cos=cosState.benz14cl;
+  const pts=[];
+  for(let i=0;i<6;i++){const a=(i*60+90)*Math.PI/180;pts.push([cx+R*Math.cos(a),cy+R*Math.sin(a)]);}
+  
+  // POS or COS (mutually exclusive)
+  if(pos){
+    posPlane(ctx,pts[0][0],pts[0][1],pts[3][0],pts[3][1],16,'σ');
+  }
+  
+  hexRing(ctx,cx,cy,R,90);
+  ctx.beginPath(); ctx.arc(cx,cy,R*.55,0,Math.PI*2);
+  ctx.strokeStyle='rgba(15,14,12,.35)'; ctx.lineWidth=1.4; ctx.stroke();
+  pts.forEach(([x,y],i)=>{
+    const dx=x-cx,dy=y-cy,l=Math.sqrt(dx*dx+dy*dy);
+    const isCl=(i===0||i===3); const dist=isCl?24:20;
+    line(ctx,x,y,x+dx/l*dist,y+dy/l*dist,1.8,'rgba(15,14,12,0.6)');
+  });
+  
+  // COS arrows to each atom
+  if(cos){
+    const cosColor='rgba(138,43,226,0.8)';
+    pts.forEach(([x,y],i)=>{
+      const dx=x-cx,dy=y-cy,l=Math.sqrt(dx*dx+dy*dy);
+      const isCl=(i===0||i===3); const dist=isCl?24:20;
+      const endX=x+dx/l*dist, endY=y+dy/l*dist;
+      drawCOSArrow(ctx,cx,cy,endX,endY,cosColor,2);
+    });
+    
+    // Center marker
+    ctx.fillStyle='rgba(138,43,226,0.15)';
+    ctx.beginPath();
+    ctx.arc(cx,cy,10,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='#7a2daa';
+    ctx.font='bold 10px monospace';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText('i',cx,cy);
+  }
+  
+  // Draw atoms on top
+  pts.forEach(([x,y],i)=>{
+    const dx=x-cx,dy=y-cy,l=Math.sqrt(dx*dx+dy*dy);
+    const isCl=(i===0||i===3); const dist=isCl?24:20;
+    atomBall(ctx,x+dx/l*dist,y+dy/l*dist,isCl?13:8,isCl?'#1a6b5a':'#378ADD',isCl?'Cl':'H',7);
+  });
+  ctx.restore();
+};
+
+// ═══ TETRAHEDRAL 3D (shared rotation state) ══════════════════════
+const tetRot={ch4:{rx:20,ry:30},ch3cl:{rx:20,ry:30},ch2cl2:{rx:20,ry:30},chcl3:{rx:20,ry:30}};
+const tetDrag={};
+const FOV=5.5, SCL=72;
+function project3D(p,rx,ry){
+  const rxr=rx*Math.PI/180,ryr=ry*Math.PI/180;
+  let y1=p[1]*Math.cos(rxr)-p[2]*Math.sin(rxr);
+  let z1=p[1]*Math.sin(rxr)+p[2]*Math.cos(rxr);
+  let x2=p[0]*Math.cos(ryr)+z1*Math.sin(ryr);
+  let z2=-p[0]*Math.sin(ryr)+z1*Math.cos(ryr);
+  const s=SCL*FOV/(FOV+z2);
+  return {sx:x2*s,sy:y1*s,sz:z2};
+}
+// Tetrahedral positions (normalized)
+const TET_POS=[[0,1,0],[.943,-.333,0],[-0.471,-.333,.816],[-0.471,-.333,-.816]];
+const COLORS_TET={H:'#378ADD',Cl:'#1a6b5a',C:'#7F77DD'};
+function drawTet3D(id,atoms,posAtoms,posPlaneIndices){
+  const c=document.getElementById('c-'+id);
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  const W=c.width/DPR, H=c.height/DPR;
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+
+  // Use same layout as Chemicular drawTet — fixed 2D projection
+  const cx=W/2, cy=H*0.48;
+  const R=Math.min(W,H)*0.28;
+  const BR=18; // ball radius for substituents
+  const ry=tetRot[id].ry;
+  const rotShift=Math.sin(ry*Math.PI/180)*R*0.38;
+
+  // 4 ligand positions: Top(0), Left/behind(1), Bottom/front(2), Right(3)
+  const pos=[
+    [cx,                          cy-R*1.05],           // 0 Top — in plane
+    [cx-R*1.05+rotShift*0.65,     cy+R*0.15+rotShift*0.15], // 1 Left — behind (dashed)
+    [cx-R*0.45-rotShift*0.50,     cy+R*0.95],           // 2 Bottom — front (wedge)
+    [cx+R*1.0,                    cy+R*0.15],            // 3 Right — in plane
+  ];
+  const M=[cx,cy];
+
+  const showPos=posState[id];
+
+  // ── POS plane (slanted quad through Top, M, Right) ──────────────
+  if(showPos){
+    const planeTL=[cx-18,        cy-R*1.55];
+    const planeTR=[cx+R*1.55,    cy-R*0.25];
+    const planeBR=[cx+R*1.45,    cy+R*0.72];
+    const planeBL=[cx-20,        cy+R*0.52];
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(planeTL[0],planeTL[1]);
+    ctx.lineTo(planeTR[0],planeTR[1]);
+    ctx.lineTo(planeBR[0],planeBR[1]);
+    ctx.lineTo(planeBL[0],planeBL[1]);
+    ctx.closePath();
+    ctx.fillStyle='rgba(26,107,90,0.12)'; ctx.fill();
+    ctx.setLineDash([8,4]);
+    ctx.strokeStyle='rgba(15,110,86,0.75)'; ctx.lineWidth=1.8; ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#0F6E56'; ctx.font=`600 11px 'DM Mono',monospace`;
+    ctx.textAlign='center'; ctx.textBaseline='bottom';
+    ctx.fillText('σ (POS)',planeTR[0]-14,planeTL[1]-5);
+
+    // ── Arrow from M pointing toward mirror atoms (Left & Bottom) ──
+    const aMidX=(pos[1][0]+pos[2][0])/2;
+    const aMidY=(pos[1][1]+pos[2][1])/2;
+    const aDX=aMidX-M[0], aDY=aMidY-M[1];
+    const aDL=Math.sqrt(aDX*aDX+aDY*aDY)||1;
+    const aNx=aDX/aDL, aNy=aDY/aDL;
+    const arrowLen=R*1.5;
+    const HEAD=16, HEADW=10;
+    const aTailX=M[0]+aNx*15, aTailY=M[1]+aNy*15;
+    const aTipX=M[0]+aNx*(arrowLen+15);
+    const aTipY=M[1]+aNy*(arrowLen+15);
+    const aPerX=-aNy, aPerY=aNx;
+    // White halo
+    ctx.beginPath(); ctx.moveTo(aTailX,aTailY); ctx.lineTo(aTipX-aNx*HEAD,aTipY-aNy*HEAD);
+    ctx.strokeStyle='rgba(255,255,255,0.8)'; ctx.lineWidth=9; ctx.lineCap='round'; ctx.stroke();
+    // Red shaft
+    ctx.beginPath(); ctx.moveTo(aTailX,aTailY); ctx.lineTo(aTipX-aNx*HEAD,aTipY-aNy*HEAD);
+    ctx.strokeStyle='#C03A10'; ctx.lineWidth=4.5; ctx.lineCap='round'; ctx.stroke();
+    ctx.lineCap='butt';
+    // Arrowhead
+    ctx.beginPath();
+    ctx.moveTo(aTipX,aTipY);
+    ctx.lineTo(aTipX-aNx*HEAD+aPerX*HEADW, aTipY-aNy*HEAD+aPerY*HEADW);
+    ctx.lineTo(aTipX-aNx*HEAD-aPerX*HEADW, aTipY-aNy*HEAD-aPerY*HEADW);
+    ctx.closePath();
+    ctx.fillStyle='#C03A10'; ctx.fill();
+    // ⊥σ label
+    ctx.fillStyle='#C03A10'; ctx.font=`600 10px 'DM Mono',monospace`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('⊥ σ', aTipX+aPerX*18, aTipY+aPerY*18);
+    ctx.restore();
+  }
+
+  // ── Bonds ────────────────────────────────────────────────────────
+  // Bond 0 (Top) — normal line, in plane
+  line(ctx, M[0],M[1], pos[0][0],pos[0][1], 2.2);
+  // Bond 1 (Left) — dashed (behind plane)
+  const dx1=pos[1][0]-M[0], dy1=pos[1][1]-M[1], l1=Math.sqrt(dx1*dx1+dy1*dy1)||1;
+  const n1=6;
+  for(let s=0;s<n1;s+=2){
+    const t0=s/n1+0.04, t1=(s+1)/n1-0.04;
+    ctx.beginPath();
+    ctx.moveTo(M[0]+dx1*t0, M[1]+dy1*t0);
+    ctx.lineTo(M[0]+dx1*t1, M[1]+dy1*t1);
+    ctx.strokeStyle='rgba(50,45,40,0.65)'; ctx.lineWidth=2.2; ctx.stroke();
+  }
+  // Bond 2 (Bottom) — solid wedge (toward viewer)
+  solidWedge(ctx, M[0],M[1], pos[2][0],pos[2][1], 12);
+  // Bond 3 (Right) — normal line, in plane
+  line(ctx, M[0],M[1], pos[3][0],pos[3][1], 2.2);
+
+  // ── Half-cut atoms on plane (Top=0, Right=3, M) ─────────────────
+  function drawHalfAtom(x,y,r,col,lbl,fs){
+    // Compute screen-space cut angle: plane is roughly vertical (top to bottom-right)
+    // Cut line direction: from Top toward Right atom
+    const dx=pos[3][0]-pos[0][0], dy=pos[3][1]-pos[0][1];
+    const angle=Math.atan2(dy,dx);
+    // Dark half
+    const nI=parseInt(col.replace('#',''),16);
+    const [R2,G2,B2]=[(nI>>16)&255,(nI>>8)&255,nI&255];
+    const gd=ctx.createRadialGradient(x-r*.32,y-r*.35,1,x,y,r);
+    gd.addColorStop(0,`rgb(${Math.max(0,R2-30)},${Math.max(0,G2-30)},${Math.max(0,B2-30)})`);
+    gd.addColorStop(1,`rgb(${Math.max(0,R2-80)},${Math.max(0,G2-80)},${Math.max(0,B2-80)})`);
+    ctx.beginPath(); ctx.moveTo(x,y);
+    ctx.arc(x,y,r,angle+Math.PI,angle); ctx.closePath();
+    ctx.fillStyle=gd; ctx.fill();
+    // Light half
+    const gl=ctx.createRadialGradient(x-r*.32,y-r*.35,1,x,y,r);
+    gl.addColorStop(0,`rgb(${Math.min(255,R2+90)},${Math.min(255,G2+90)},${Math.min(255,B2+90)})`);
+    gl.addColorStop(.55,col);
+    gl.addColorStop(1,`rgb(${Math.max(0,R2-40)},${Math.max(0,G2-40)},${Math.max(0,B2-40)})`);
+    ctx.beginPath(); ctx.moveTo(x,y);
+    ctx.arc(x,y,r,angle,angle+Math.PI); ctx.closePath();
+    ctx.fillStyle=gl; ctx.fill();
+    // Specular
+    const sg=ctx.createRadialGradient(x-r*.28,y-r*.28,0,x,y,r*.65);
+    sg.addColorStop(0,'rgba(255,255,255,.42)'); sg.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle=sg; ctx.fill();
+    // Cut line
+    ctx.beginPath();
+    ctx.moveTo(x+Math.cos(angle)*r, y+Math.sin(angle)*r);
+    ctx.lineTo(x+Math.cos(angle+Math.PI)*r, y+Math.sin(angle+Math.PI)*r);
+    ctx.strokeStyle='rgba(255,255,255,0.6)'; ctx.lineWidth=1.2; ctx.stroke();
+    ctx.strokeStyle='rgba(0,0,0,0.15)'; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.92)'; ctx.font=`700 ${fs||Math.max(8,r*.58)}px 'DM Mono',monospace`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.shadowColor='rgba(0,0,0,.35)'; ctx.shadowBlur=2;
+    ctx.fillText(lbl,x,y); ctx.shadowBlur=0;
+  }
+
+  // Draw all atoms — those on plane (Top=0, Right=3, M) get half-cut, others full
+  // Back atom first (Left=1)
+  atomBall(ctx, pos[1][0],pos[1][1], BR, COLORS_TET[atoms[1]]||'#888', atoms[1], atoms[1]==='Cl'?7:8);
+  // Then plane atoms half-cut
+  if(showPos){
+    // M centre
+    drawHalfAtom(M[0],M[1],12,COLORS_TET.C,'C',9);
+    // Top atom
+    drawHalfAtom(pos[0][0],pos[0][1],BR,COLORS_TET[atoms[0]]||'#888',atoms[0],atoms[0]==='Cl'?7:8);
+    // Right atom
+    drawHalfAtom(pos[3][0],pos[3][1],BR,COLORS_TET[atoms[3]]||'#888',atoms[3],atoms[3]==='Cl'?7:8);
+  } else {
+    atomBall(ctx,M[0],M[1],12,COLORS_TET.C,'C',9);
+    atomBall(ctx,pos[0][0],pos[0][1],BR,COLORS_TET[atoms[0]]||'#888',atoms[0],atoms[0]==='Cl'?7:8);
+    atomBall(ctx,pos[3][0],pos[3][1],BR,COLORS_TET[atoms[3]]||'#888',atoms[3],atoms[3]==='Cl'?7:8);
+  }
+  // Front atom last (Bottom=2, wedge, always full)
+  atomBall(ctx, pos[2][0],pos[2][1], BR, COLORS_TET[atoms[2]]||'#888', atoms[2], atoms[2]==='Cl'?7:8);
+
+  ctx.restore();
+}
+function initTetDrag(id){
+  const c=document.getElementById('c-'+id);
+  if(!c||tetDrag[id])return;
+  tetDrag[id]=true;
+  c.addEventListener('mousedown',e=>{c._drag=true;c._lx=e.clientX;c._ly=e.clientY;});
+  window.addEventListener('mousemove',e=>{
+    if(!c._drag)return;
+    tetRot[id].ry+=(e.clientX-c._lx)*0.7;
+    tetRot[id].rx+=(e.clientY-c._ly)*0.5;
+    tetRot[id].rx=Math.max(-85,Math.min(85,tetRot[id].rx));
+    c._lx=e.clientX;c._ly=e.clientY;
+    drawFns[id]&&drawFns[id]();
+  });
+  window.addEventListener('mouseup',()=>{c._drag=false;});
+  c.addEventListener('touchstart',e=>{c._drag=true;c._lx=e.touches[0].clientX;c._ly=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchmove',e=>{
+    if(!c._drag)return;
+    tetRot[id].ry+=(e.touches[0].clientX-c._lx)*0.7;
+    tetRot[id].rx+=(e.touches[0].clientY-c._ly)*0.5;
+    tetRot[id].rx=Math.max(-85,Math.min(85,tetRot[id].rx));
+    c._lx=e.touches[0].clientX;c._ly=e.touches[0].clientY;
+    drawFns[id]&&drawFns[id]();
+  },{passive:true});
+}
+drawFns.ch4=()=>drawTet3D('ch4',['H','H','H','H'],null,[0,1]);
+drawFns.ch3cl=()=>drawTet3D('ch3cl',['Cl','H','H','H'],null,[0,1]);
+drawFns.ch2cl2=()=>drawTet3D('ch2cl2',['Cl','H','H','Cl'],null,[0,3]);
+drawFns.chcl3=()=>drawTet3D('chcl3',['Cl','Cl','Cl','H'],null,[0,1]);
+
+// ═══ CYCLIC 3D (rotation state) ══════════════════════════════════
+const cycRot={'13dimethylcb':{rx:15,ry:0},'cis12mcp':{rx:20,ry:30},'trans13mcp':{rx:20,ry:30},'cis14dcch':{rx:20,ry:30},'trans14dcch':{rx:20,ry:30},'cis123tcp':{rx:15,ry:0},'cis13emcp':{rx:15,ry:0},'biphenyl-planar':{rx:15,ry:0},'biphenyl-perp':{rx:15,ry:0}};
+const cycDrag={};
+function initCycDrag(id){
+  const c=document.getElementById('c-'+id);
+  if(!c||cycDrag[id])return; cycDrag[id]=true;
+  c.addEventListener('mousedown',e=>{c._drag=true;c._lx=e.clientX;c._ly=e.clientY;});
+  window.addEventListener('mousemove',e=>{
+    if(!c._drag)return;
+    cycRot[id].ry+=(e.clientX-c._lx)*0.7;
+    cycRot[id].rx+=(e.clientY-c._ly)*0.5;
+    // For 3-membered rings, constrain rotation to keep ring visible
+    const is3ring=(id==='13dimethylcb'||id==='cis123tcp'||id==='cis13emcp');
+    if(is3ring){
+      cycRot[id].rx=Math.max(-30,Math.min(30,cycRot[id].rx));
+    } else {
+      cycRot[id].rx=Math.max(-85,Math.min(85,cycRot[id].rx));
+    }
+    c._lx=e.clientX;c._ly=e.clientY;
+    drawFns[id]&&drawFns[id]();
+  });
+  window.addEventListener('mouseup',()=>{c._drag=false;});
+  c.addEventListener('touchstart',e=>{c._drag=true;c._lx=e.touches[0].clientX;c._ly=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchmove',e=>{
+    if(!c._drag)return;
+    cycRot[id].ry+=(e.touches[0].clientX-c._lx)*0.7;
+    cycRot[id].rx+=(e.touches[0].clientY-c._ly)*0.5;
+    const is3ring=(id==='13dimethylcb'||id==='cis123tcp'||id==='cis13emcp');
+    if(is3ring){
+      cycRot[id].rx=Math.max(-30,Math.min(30,cycRot[id].rx));
+    } else {
+      cycRot[id].rx=Math.max(-85,Math.min(85,cycRot[id].rx));
+    }
+    c._lx=e.touches[0].clientX;c._ly=e.touches[0].clientY;
+    drawFns[id]&&drawFns[id]();
+  },{passive:true});
+}
+
+function proj3D(p,rx,ry,cx,cy){
+  const rxr=rx*Math.PI/180,ryr=ry*Math.PI/180;
+  let y1=p[1]*Math.cos(rxr)-p[2]*Math.sin(rxr);
+  let z1=p[1]*Math.sin(rxr)+p[2]*Math.cos(rxr);
+  let x2=p[0]*Math.cos(ryr)+z1*Math.sin(ryr);
+  let z2=-p[0]*Math.sin(ryr)+z1*Math.cos(ryr);
+  const fov=6,scl=78;
+  const s=scl*fov/(fov+z2);
+  return{sx:cx+x2*s,sy:cy+y1*s,rz:z2};
+}
+
+// ── cis-1,3-Dimethylcyclobutane ───────────────────────────────────
+drawFns['13dimethylcb']=function(){
+  const id='13dimethylcb';
+  const c=document.getElementById('c-'+id);
+  const ctx=c.getContext('2d'); const W=c.width/DPR,H=c.height/DPR;
+  const cx=W/2,cy=H/2+5;
+  const {rx,ry}=cycRot[id];
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+  const RS=.9,MH=1.8;
+  // Ring atoms in 3D
+  const ring3D=[[-RS,0,-RS],[RS,0,-RS],[RS,0,RS],[-RS,0,RS]];
+  const me1_3D=[-RS,MH,-RS]; // C1 methyl UP
+  const me3_3D=[RS,-MH,RS];  // C3 methyl DOWN
+  const rp=ring3D.map(p=>proj3D(p,rx,ry,cx,cy));
+  const me1p=proj3D(me1_3D,rx,ry,cx,cy);
+  const me3p=proj3D(me3_3D,rx,ry,cx,cy);
+  
+  // Calculate ring center in 3D
+  const center3D=[0,0,0];
+  const centerP=proj3D(center3D,rx,ry,cx,cy);
+  
+  // POS or COS (mutually exclusive)
+  if(posState[id]){
+    const plPts=[[-RS,-1.7,-RS],[-RS,1.7,-RS],[RS,1.7,RS],[RS,-1.7,RS]].map(p=>proj3D(p,rx,ry,cx,cy));
+    ctx.save(); ctx.beginPath();
+    plPts.forEach((p,i)=>i===0?ctx.moveTo(p.sx,p.sy):ctx.lineTo(p.sx,p.sy));
+    ctx.closePath();
+    ctx.fillStyle='rgba(26,107,90,.1)'; ctx.fill();
+    ctx.setLineDash([7,4]); ctx.strokeStyle='rgba(15,110,86,.55)'; ctx.lineWidth=1.4;
+    ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle='rgba(15,110,86,.8)'; ctx.font=`600 9px 'DM Mono',monospace`;
+    ctx.textAlign='left'; ctx.fillText('σ',plPts[1].sx+6,plPts[1].sy);
+    ctx.restore();
+  }
+  
+  if(cosState[id]){
+    const cosColor='rgba(138,43,226,0.8)';
+    // 3D COS arrows - to all atoms from center
+    // 1. Arrows to methyls (diagonal Me1 to Me3)
+    drawCOSArrow(ctx,centerP.sx,centerP.sy,me1p.sx,me1p.sy,cosColor,2);
+    drawCOSArrow(ctx,centerP.sx,centerP.sy,me3p.sx,me3p.sy,cosColor,2);
+    // 2. Arrows to all 4 ring carbons
+    drawCOSArrow(ctx,centerP.sx,centerP.sy,rp[0].sx,rp[0].sy,cosColor,2); // C1
+    drawCOSArrow(ctx,centerP.sx,centerP.sy,rp[1].sx,rp[1].sy,cosColor,2); // C2
+    drawCOSArrow(ctx,centerP.sx,centerP.sy,rp[2].sx,rp[2].sy,cosColor,2); // C3
+    drawCOSArrow(ctx,centerP.sx,centerP.sy,rp[3].sx,rp[3].sy,cosColor,2); // C4
+    
+    // Center marker
+    ctx.fillStyle='rgba(138,43,226,0.15)';
+    ctx.beginPath();
+    ctx.arc(centerP.sx,centerP.sy,10,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='#7a2daa';
+    ctx.font='bold 10px monospace';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText('i',centerP.sx,centerP.sy);
+  }
+  
+  // Ring bonds
+  [[0,1],[1,2],[2,3],[3,0]].forEach(([a,b])=>line(ctx,rp[a].sx,rp[a].sy,rp[b].sx,rp[b].sy));
+  // Methyl bonds
+  const dz1=me1p.rz-rp[0].rz, dz3=me3p.rz-rp[2].rz;
+  if(Math.abs(dz1)<.2) line(ctx,rp[0].sx,rp[0].sy,me1p.sx,me1p.sy,2.5);
+  else if(dz1<0) dashWedge(ctx,rp[0].sx,rp[0].sy,me1p.sx,me1p.sy,11);
+  else solidWedge(ctx,rp[0].sx,rp[0].sy,me1p.sx,me1p.sy,11);
+  if(Math.abs(dz3)<.2) line(ctx,rp[2].sx,rp[2].sy,me3p.sx,me3p.sy,2.5);
+  else if(dz3<0) dashWedge(ctx,rp[2].sx,rp[2].sy,me3p.sx,me3p.sy,11);
+  else solidWedge(ctx,rp[2].sx,rp[2].sy,me3p.sx,me3p.sy,11);
+  // Ring C
+  rp.forEach(p=>{ctx.beginPath();ctx.arc(p.sx,p.sy,5,0,Math.PI*2);ctx.fillStyle='#1e1b16';ctx.fill();});
+  // Methyl balls
+  atomBall(ctx,me1p.sx,me1p.sy,16,'#1a6b5a','Me',8);
+  atomBall(ctx,me3p.sx,me3p.sy,16,'#c84b2f','Me',8);
+  ctx.restore();
+};
+
+// ── cis-1,3-Dimethylcyclopentane ──────────────────────────────────
+drawFns['cis12mcp']=function(){
+  const id='cis12mcp';
+  const c=document.getElementById('c-'+id);
+  const ctx=c.getContext('2d'); const W=c.width/DPR,H=c.height/DPR;
+  const cx=W/2, cy=H/2+8;
+  const {rx,ry}=cycRot[id];
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+
+  // ── Ring: 5 carbons, ALL in XZ plane (y=0) ──────────────────────
+  // Orient so C2 is at TOP (POS passes through C2 vertically)
+  // C2=idx0 (top), C3=idx1 (upper-right), C4=idx2 (lower-right),
+  // C5=idx3 (lower-left), C1=idx4 (upper-left)
+  // So C1 is on LEFT, C3 is on RIGHT
+  const R5=0.88, BH=1.15, SH=0.65;
+  const ring3D=[];
+  for(let i=0;i<5;i++){
+    const a=(i*72-90)*Math.PI/180;
+    ring3D.push([R5*Math.cos(a), 0, R5*Math.sin(a)]);
+  }
+  // In this layout: idx4=C1 (upper-left), idx0=C2 (top), idx1=C3 (upper-right)
+  const C1=4, C2=0, C3=1; // indices
+  const subs3D={
+    c1_me: [ring3D[C1][0], -BH, ring3D[C1][2]],  // C1 CH₃ DOWN
+    c1_h:  [ring3D[C1][0],  SH, ring3D[C1][2]],  // C1 H UP
+    c3_me: [ring3D[C3][0], -BH, ring3D[C3][2]],  // C3 CH₃ DOWN
+    c3_h:  [ring3D[C3][0],  SH, ring3D[C3][2]],  // C3 H UP
+  };
+
+  const rp=ring3D.map(p=>proj3D(p,rx,ry,cx,cy));
+  const sp={};
+  Object.entries(subs3D).forEach(([k,p])=>{sp[k]=proj3D(p,rx,ry,cx,cy);});
+
+  // ── POS plane through C2 and midpoint of C1–C3 ─────────────────
+  if(posState[id]){
+    const c2p = ring3D[C2];
+    const midX = (ring3D[C1][0]+ring3D[C3][0])/2;
+    const midZ = (ring3D[C1][2]+ring3D[C3][2])/2;
+    // Extend well beyond the molecule in both directions
+    const ext=2.8;
+    // Direction vector along the plane (C2 to midpoint)
+    const dxP=midX-c2p[0], dzP=midZ-c2p[2];
+    const dLen=Math.sqrt(dxP*dxP+dzP*dzP)||1;
+    const uxP=dxP/dLen, uzP=dzP/dLen;
+    // Extended corners: push beyond C2 upward and beyond midpoint downward
+    const topX=c2p[0]-uxP*1.2, topZ=c2p[2]-uzP*1.2;
+    const botX=midX+uxP*1.2,   botZ=midZ+uzP*1.2;
+    const plPts=[
+      [topX, -ext, topZ],
+      [topX,  ext, topZ],
+      [botX,  ext, botZ],
+      [botX, -ext, botZ],
+    ].map(p=>proj3D(p,rx,ry,cx,cy));
+    ctx.save();
+    ctx.beginPath();
+    plPts.forEach((p,i)=>i===0?ctx.moveTo(p.sx,p.sy):ctx.lineTo(p.sx,p.sy));
+    ctx.closePath();
+    ctx.fillStyle='rgba(26,107,90,0.13)'; ctx.fill();
+    ctx.setLineDash([8,4]);
+    ctx.strokeStyle='rgba(15,110,86,0.7)'; ctx.lineWidth=1.8; ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='rgba(15,110,86,0.85)'; ctx.font=`600 10px 'DM Mono',monospace`;
+    ctx.textAlign='left'; ctx.textBaseline='middle';
+    ctx.fillText('σ (POS)',plPts[1].sx+7,plPts[1].sy);
+    ctx.restore();
+  }
+
+  function subBond(ringSp, subSp, wedgeW){
+    const dz=subSp.rz-ringSp.rz;
+    if(Math.abs(dz)<0.15){
+      line(ctx,ringSp.sx,ringSp.sy,subSp.sx,subSp.sy,2.2);
+    } else if(dz<0){
+      const dx=subSp.sx-ringSp.sx, dy=subSp.sy-ringSp.sy, n=6;
+      for(let s=0;s<n;s+=2){
+        const t0=s/n+0.04,t1=(s+1)/n-0.04;
+        ctx.beginPath();
+        ctx.moveTo(ringSp.sx+dx*t0,ringSp.sy+dy*t0);
+        ctx.lineTo(ringSp.sx+dx*t1,ringSp.sy+dy*t1);
+        ctx.strokeStyle='rgba(50,45,40,0.65)'; ctx.lineWidth=2.2; ctx.stroke();
+      }
+    } else {
+      solidWedge(ctx,ringSp.sx,ringSp.sy,subSp.sx,subSp.sy,wedgeW);
+    }
+  }
+
+  // Draw ring bonds
+  [[0,1],[1,2],[2,3],[3,4],[4,0]].forEach(([a,b])=>{
+    line(ctx,rp[a].sx,rp[a].sy,rp[b].sx,rp[b].sy,2.5);
+  });
+
+  // Only C1 and C3 have visible substituents (CH3 up, H down)
+  const allSubs=[
+    {rIdx:C1, sp:sp.c1_me, lbl:'Me', col:'#1a6b5a', r:15},
+    {rIdx:C1, sp:sp.c1_h,  lbl:'H',  col:'#378ADD', r:9},
+    {rIdx:C3, sp:sp.c3_me, lbl:'Me', col:'#1a6b5a', r:15},
+    {rIdx:C3, sp:sp.c3_h,  lbl:'H',  col:'#378ADD', r:9},
+  ];
+  const sorted=[...allSubs].sort((a,b)=>b.sp.rz-a.sp.rz);
+
+  // Bonds first
+  sorted.forEach(({rIdx,sp:subSp,r})=>subBond(rp[rIdx],subSp,r===15?12:8));
+
+  // Ring carbon dots
+  rp.forEach((p,i)=>{
+    ctx.beginPath(); ctx.arc(p.sx,p.sy,5.5,0,Math.PI*2);
+    ctx.fillStyle='#1e1b16'; ctx.fill();
+    // Label C1, C2, C3
+    const lbl=i===C1?'C1':i===C2?'C2':i===C3?'C3':null;
+    if(lbl){
+      ctx.fillStyle='rgba(15,14,12,0.45)'; ctx.font=`500 8px 'DM Mono',monospace`;
+      ctx.textAlign='center';
+      ctx.fillText(lbl, p.sx+(p.sx-cx)*0.25, p.sy+(p.sy-cy)*0.25+11);
+    }
+  });
+
+  // Atoms
+  sorted.forEach(({sp:subSp,lbl,col,r})=>{
+    atomBall(ctx,subSp.sx,subSp.sy,r,col,lbl,lbl==='Me'?8:7);
+  });
+
+  ctx.restore();
+};
+
+// ── trans-1,3-Dimethylcyclopentane (No POS) ─────────────────────
+drawFns['trans13mcp']=function(){
+  const id='trans13mcp';
+  const c=document.getElementById('c-'+id);
+  const ctx=c.getContext('2d'); const W=c.width/DPR,H=c.height/DPR;
+  const cx=W/2, cy=H/2+8;
+  const {rx,ry}=cycRot[id];
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+
+  // Same ring layout: C2 at top, C1 left, C3 right
+  const R5=0.88, BH=1.15, SH=0.65;
+  const ring3D=[];
+  for(let i=0;i<5;i++){
+    const a=(i*72-90)*Math.PI/180;
+    ring3D.push([R5*Math.cos(a), 0, R5*Math.sin(a)]);
+  }
+  const C1=4, C2=0, C3=1;
+  // TRANS: C1 has CH₃ DOWN and H UP, C3 has CH₃ UP and H DOWN (opposite sides)
+  const subs3D={
+    c1_me: [ring3D[C1][0], -BH, ring3D[C1][2]],  // C1 CH₃ DOWN
+    c1_h:  [ring3D[C1][0],  SH, ring3D[C1][2]],  // C1 H UP
+    c3_me: [ring3D[C3][0],  BH, ring3D[C3][2]],  // C3 CH₃ UP
+    c3_h:  [ring3D[C3][0], -SH, ring3D[C3][2]],  // C3 H DOWN
+  };
+
+  const rp=ring3D.map(p=>proj3D(p,rx,ry,cx,cy));
+  const sp={};
+  Object.entries(subs3D).forEach(([k,p])=>{sp[k]=proj3D(p,rx,ry,cx,cy);});
+
+  function subBond(ringSp,subSp,wedgeW){
+    const dz=subSp.rz-ringSp.rz;
+    if(Math.abs(dz)<0.15){
+      line(ctx,ringSp.sx,ringSp.sy,subSp.sx,subSp.sy,2.2);
+    } else if(dz<0){
+      const dx=subSp.sx-ringSp.sx,dy=subSp.sy-ringSp.sy,n=6;
+      for(let s=0;s<n;s+=2){
+        const t0=s/n+0.04,t1=(s+1)/n-0.04;
+        ctx.beginPath();
+        ctx.moveTo(ringSp.sx+dx*t0,ringSp.sy+dy*t0);
+        ctx.lineTo(ringSp.sx+dx*t1,ringSp.sy+dy*t1);
+        ctx.strokeStyle='rgba(50,45,40,0.65)'; ctx.lineWidth=2.2; ctx.stroke();
+      }
+    } else {
+      solidWedge(ctx,ringSp.sx,ringSp.sy,subSp.sx,subSp.sy,wedgeW);
+    }
+  }
+
+  // Ring bonds
+  [[0,1],[1,2],[2,3],[3,4],[4,0]].forEach(([a,b])=>{
+    line(ctx,rp[a].sx,rp[a].sy,rp[b].sx,rp[b].sy,2.5);
+  });
+
+  const allSubs=[
+    {rIdx:C1, sp:sp.c1_me, lbl:'Me', col:'#1a6b5a', r:15},
+    {rIdx:C1, sp:sp.c1_h,  lbl:'H',  col:'#378ADD', r:9},
+    {rIdx:C3, sp:sp.c3_me, lbl:'Me', col:'#1a6b5a', r:15},
+    {rIdx:C3, sp:sp.c3_h,  lbl:'H',  col:'#378ADD', r:9},
+  ];
+  const sorted=[...allSubs].sort((a,b)=>b.sp.rz-a.sp.rz);
+  sorted.forEach(({rIdx,sp:subSp,r})=>subBond(rp[rIdx],subSp,r===15?12:8));
+
+  rp.forEach((p,i)=>{
+    ctx.beginPath(); ctx.arc(p.sx,p.sy,5.5,0,Math.PI*2);
+    ctx.fillStyle='#1e1b16'; ctx.fill();
+    const lbl=i===C1?'C1':i===C2?'C2':i===C3?'C3':null;
+    if(lbl){
+      ctx.fillStyle='rgba(15,14,12,0.45)'; ctx.font=`500 8px 'DM Mono',monospace`;
+      ctx.textAlign='center';
+      ctx.fillText(lbl,p.sx+(p.sx-cx)*0.25,p.sy+(p.sy-cy)*0.25+11);
+    }
+  });
+  sorted.forEach(({sp:subSp,lbl,col,r})=>{
+    atomBall(ctx,subSp.sx,subSp.sy,r,col,lbl,lbl==='Me'?8:7);
+  });
+
+  // No POS label
+  ctx.fillStyle='rgba(200,75,47,0.7)'; ctx.font=`700 10px 'DM Mono',monospace`;
+  ctx.textAlign='center';
+  ctx.fillText('No POS — CH₃ groups on opposite sides',cx,H-12);
+  ctx.restore();
+};
+
+// ── cis-2,5-Dichloro-1,4-dioxane ─────────────────────────────────
+drawFns['cis14dcch']=function(){
+  const id='cis14dcch';
+  const c=document.getElementById('c-'+id);
+  const ctx=c.getContext('2d'); const W=c.width/DPR,H=c.height/DPR;
+  const cx=W/2, cy=H/2+8;
+  const {rx,ry}=cycRot[id];
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+
+  // 1,4-dioxane: 6-membered ring, planar, O at positions 1 and 4
+  // Hexagon: O(1), C(2), O(4), C(5), and two more C atoms
+  const R6=0.95, BH=1.25, SH=0.7;
+  const ring3D=[];
+  for(let i=0;i<6;i++){
+    const a=(i*60-90)*Math.PI/180;
+    ring3D.push([R6*Math.cos(a), 0, R6*Math.sin(a)]);
+  }
+  // Ring: O(0), C(1), C(2), O(3), C(4), C(5)
+  // Standard 1,4-dioxane numbering: pos1=O, pos2=C, pos3=C, pos4=O, pos5=C, pos6=C
+  // 2,5-dichloro: Cl at position 2 (idx1) and position 5 (idx4)
+  const C2=1, C5=4;  // position 2 and position 5
+  // cis: both Cl on same side (both DOWN)
+  const subs3D={
+    c2_cl: [ring3D[C2][0], -BH, ring3D[C2][2]],  // C2 Cl DOWN
+    c2_h:  [ring3D[C2][0],  SH, ring3D[C2][2]],  // C2 H UP
+    c5_cl: [ring3D[C5][0], -BH, ring3D[C5][2]],  // C5 Cl DOWN
+    c5_h:  [ring3D[C5][0],  SH, ring3D[C5][2]],  // C5 H UP
+  };
+
+  const rp=ring3D.map(p=>proj3D(p,rx,ry,cx,cy));
+  const sp={};
+  Object.entries(subs3D).forEach(([k,p])=>{sp[k]=proj3D(p,rx,ry,cx,cy);});
+
+  // No POS for cis
+  
+  function subBond(ringSp,subSp,wedgeW){
+    const dz=subSp.rz-ringSp.rz;
+    if(Math.abs(dz)<0.15) line(ctx,ringSp.sx,ringSp.sy,subSp.sx,subSp.sy,2.2);
+    else if(dz<0){
+      const dx=subSp.sx-ringSp.sx,dy=subSp.sy-ringSp.sy,n=6;
+      for(let s=0;s<n;s+=2){
+        const t0=s/n+0.04,t1=(s+1)/n-0.04;
+        ctx.beginPath(); ctx.moveTo(ringSp.sx+dx*t0,ringSp.sy+dy*t0);
+        ctx.lineTo(ringSp.sx+dx*t1,ringSp.sy+dy*t1);
+        ctx.strokeStyle='rgba(50,45,40,0.65)'; ctx.lineWidth=2.2; ctx.stroke();
+      }
+    } else solidWedge(ctx,ringSp.sx,ringSp.sy,subSp.sx,subSp.sy,wedgeW);
+  }
+
+  [[0,1],[1,2],[2,3],[3,4],[4,5],[5,0]].forEach(([a,b])=>line(ctx,rp[a].sx,rp[a].sy,rp[b].sx,rp[b].sy,2.5));
+
+  const allSubs=[
+    {rIdx:C2,sp:sp.c2_cl,lbl:'Cl',col:'#1a6b5a',r:14},
+    {rIdx:C2,sp:sp.c2_h, lbl:'H', col:'#378ADD',r:9},
+    {rIdx:C5,sp:sp.c5_cl,lbl:'Cl',col:'#1a6b5a',r:14},
+    {rIdx:C5,sp:sp.c5_h, lbl:'H', col:'#378ADD',r:9},
+  ];
+  const sorted=[...allSubs].sort((a,b)=>b.sp.rz-a.sp.rz);
+  sorted.forEach(({rIdx,sp:subSp,r})=>subBond(rp[rIdx],subSp,r===14?12:8));
+
+  // Draw ring atoms: O at 0,2 (red), C elsewhere (dark)
+  rp.forEach((p,i)=>{
+    const isO=(i===0||i===3);
+    if(isO){
+      atomBall(ctx,p.sx,p.sy,11,'#E24B4A','O',8);
+    } else {
+      ctx.beginPath(); ctx.arc(p.sx,p.sy,5.5,0,Math.PI*2);
+      ctx.fillStyle='#1e1b16'; ctx.fill();
+    }
+  });
+  sorted.forEach(({sp:subSp,lbl,col,r})=>atomBall(ctx,subSp.sx,subSp.sy,r,col,lbl,lbl==='Cl'?7:7));
+
+  // No POS label
+  ctx.fillStyle='rgba(200,75,47,0.7)'; ctx.font=`700 10px 'DM Mono',monospace`;
+  ctx.textAlign='center';
+  ctx.fillText('No POS — O atoms break symmetry',cx,H-12);
+  ctx.restore();
+};
+
+// ── trans-2,5-Dichloro-1,4-dioxane ───────────────────────────────
+drawFns['trans14dcch']=function(){
+  const id='trans14dcch';
+  const c=document.getElementById('c-'+id);
+  const ctx=c.getContext('2d'); const W=c.width/DPR,H=c.height/DPR;
+  const cx=W/2, cy=H/2+8;
+  const {rx,ry}=cycRot[id];
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+
+  const R6=0.95, BH=1.25, SH=0.7;
+  const ring3D=[];
+  for(let i=0;i<6;i++){
+    const a=(i*60-90)*Math.PI/180;
+    ring3D.push([R6*Math.cos(a), 0, R6*Math.sin(a)]);
+  }
+  const C2=1, C5=4;  // position 2 and position 5
+  // trans: C2 Cl DOWN, C5 Cl UP (opposite sides)
+  const subs3D={
+    c2_cl: [ring3D[C2][0], -BH, ring3D[C2][2]],  // C2 Cl DOWN
+    c2_h:  [ring3D[C2][0],  SH, ring3D[C2][2]],  // C2 H UP
+    c5_cl: [ring3D[C5][0],  BH, ring3D[C5][2]],  // C5 Cl UP
+    c5_h:  [ring3D[C5][0], -SH, ring3D[C5][2]],  // C5 H DOWN
+  };
+
+  const rp=ring3D.map(p=>proj3D(p,rx,ry,cx,cy));
+  const sp={};
+  Object.entries(subs3D).forEach(([k,p])=>{sp[k]=proj3D(p,rx,ry,cx,cy);});
+
+  // Calculate ring center in 3D
+  const center3D=[0,0,0];
+  const centerP=proj3D(center3D,rx,ry,cx,cy);
+
+  // COS visualization
+  if(cosState[id]){
+    const cosColor='rgba(138,43,226,0.8)';
+    // Arrows to Cl atoms (trans positions)
+    drawCOSArrow(ctx,centerP.sx,centerP.sy,sp.c2_cl.sx,sp.c2_cl.sy,cosColor,2);
+    drawCOSArrow(ctx,centerP.sx,centerP.sy,sp.c5_cl.sx,sp.c5_cl.sy,cosColor,2);
+    // Arrows to H atoms (trans positions)
+    drawCOSArrow(ctx,centerP.sx,centerP.sy,sp.c2_h.sx,sp.c2_h.sy,cosColor,2);
+    drawCOSArrow(ctx,centerP.sx,centerP.sy,sp.c5_h.sx,sp.c5_h.sy,cosColor,2);
+    // Arrows to all 6 ring atoms (2 O and 4 C)
+    rp.forEach((p)=>{
+      drawCOSArrow(ctx,centerP.sx,centerP.sy,p.sx,p.sy,cosColor,2);
+    });
+    
+    // Center marker
+    ctx.fillStyle='rgba(138,43,226,0.15)';
+    ctx.beginPath();
+    ctx.arc(centerP.sx,centerP.sy,10,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='#7a2daa';
+    ctx.font='bold 10px monospace';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText('i',centerP.sx,centerP.sy);
+  }
+
+  function subBond(ringSp,subSp,wedgeW){
+    const dz=subSp.rz-ringSp.rz;
+    if(Math.abs(dz)<0.15) line(ctx,ringSp.sx,ringSp.sy,subSp.sx,subSp.sy,2.2);
+    else if(dz<0){
+      const dx=subSp.sx-ringSp.sx,dy=subSp.sy-ringSp.sy,n=6;
+      for(let s=0;s<n;s+=2){
+        const t0=s/n+0.04,t1=(s+1)/n-0.04;
+        ctx.beginPath(); ctx.moveTo(ringSp.sx+dx*t0,ringSp.sy+dy*t0);
+        ctx.lineTo(ringSp.sx+dx*t1,ringSp.sy+dy*t1);
+        ctx.strokeStyle='rgba(50,45,40,0.65)'; ctx.lineWidth=2.2; ctx.stroke();
+      }
+    } else solidWedge(ctx,ringSp.sx,ringSp.sy,subSp.sx,subSp.sy,wedgeW);
+  }
+
+  [[0,1],[1,2],[2,3],[3,4],[4,5],[5,0]].forEach(([a,b])=>line(ctx,rp[a].sx,rp[a].sy,rp[b].sx,rp[b].sy,2.5));
+
+  const allSubs=[
+    {rIdx:C2,sp:sp.c2_cl,lbl:'Cl',col:'#1a6b5a',r:14},
+    {rIdx:C2,sp:sp.c2_h, lbl:'H', col:'#378ADD',r:9},
+    {rIdx:C5,sp:sp.c5_cl,lbl:'Cl',col:'#1a6b5a',r:14},
+    {rIdx:C5,sp:sp.c5_h, lbl:'H', col:'#378ADD',r:9},
+  ];
+  const sorted=[...allSubs].sort((a,b)=>b.sp.rz-a.sp.rz);
+  sorted.forEach(({rIdx,sp:subSp,r})=>subBond(rp[rIdx],subSp,r===14?12:8));
+
+  rp.forEach((p,i)=>{
+    const isO=(i===0||i===3);
+    if(isO){
+      atomBall(ctx,p.sx,p.sy,11,'#E24B4A','O',8);
+    } else {
+      ctx.beginPath(); ctx.arc(p.sx,p.sy,5.5,0,Math.PI*2);
+      ctx.fillStyle='#1e1b16'; ctx.fill();
+    }
+  });
+  sorted.forEach(({sp:subSp,lbl,col,r})=>atomBall(ctx,subSp.sx,subSp.sy,r,col,lbl,lbl==='Cl'?7:7));
+
+  // Label
+  if(!cosState[id]){
+    ctx.fillStyle='rgba(200,75,47,0.7)'; ctx.font=`700 10px 'DM Mono',monospace`;
+    ctx.textAlign='center';
+    ctx.fillText('No POS — O atoms break symmetry',cx,H-12);
+  } else {
+    ctx.fillStyle='rgba(138,43,226,0.8)'; ctx.font=`700 10px 'DM Mono',monospace`;
+    ctx.textAlign='center';
+    ctx.fillText('COS at center — trans configuration',cx,H-12);
+  }
+  ctx.restore();
+};
+
+// ── cis-1,2,3-Trimethylcyclopropane ──────────────────────────────
+drawFns['cis123tcp']=function(){
+  const id='cis123tcp';
+  const c=document.getElementById('c-'+id);
+  const ctx=c.getContext('2d'); const W=c.width/DPR,H=c.height/DPR;
+  const cx=W/2, cy=H/2+8;
+  const {rx,ry}=cycRot[id];
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+
+  // Cyclopropane ring in XZ plane
+  const R3=0.85, BH=1.15, SH=0.7;
+  const ring3D=[];
+  for(let i=0;i<3;i++){
+    const a=(i*120-90)*Math.PI/180;
+    ring3D.push([R3*Math.cos(a), 0, R3*Math.sin(a)]);
+  }
+  // C1=idx0(top), C2=idx1(lower-right), C3=idx2(lower-left)
+  // All three have CH3, all cis (all on same side - all DOWN)
+  const subs3D={
+    c1_me: [ring3D[0][0], -BH, ring3D[0][2]],  // C1 CH3 DOWN
+    c1_h:  [ring3D[0][0],  SH, ring3D[0][2]],  // C1 H UP
+    c2_me: [ring3D[1][0], -BH, ring3D[1][2]],  // C2 CH3 DOWN
+    c2_h:  [ring3D[1][0],  SH, ring3D[1][2]],  // C2 H UP
+    c3_me: [ring3D[2][0], -BH, ring3D[2][2]],  // C3 CH3 DOWN
+    c3_h:  [ring3D[2][0],  SH, ring3D[2][2]],  // C3 H UP
+  };
+
+  const rp=ring3D.map(p=>proj3D(p,rx,ry,cx,cy));
+  const sp={};
+  Object.entries(subs3D).forEach(([k,p])=>{sp[k]=proj3D(p,rx,ry,cx,cy);});
+
+  // POS: vertical plane through C2 (idx1) and perpendicular to C1-C3 line
+  if(posState[id]){
+    const c2p=ring3D[1];
+    // Midpoint of C1-C3
+    const midX=(ring3D[0][0]+ring3D[2][0])/2;
+    const midZ=(ring3D[0][2]+ring3D[2][2])/2;
+    const ext=2.5;
+    const dx=midX-c2p[0], dz=midZ-c2p[2];
+    const dLen=Math.sqrt(dx*dx+dz*dz)||1;
+    const ux=dx/dLen, uz=dz/dLen;
+    const topX=c2p[0]-ux*1.2, topZ=c2p[2]-uz*1.2;
+    const botX=midX+ux*1.2, botZ=midZ+uz*1.2;
+    const plPts=[
+      [topX,-ext,topZ],[topX,ext,topZ],[botX,ext,botZ],[botX,-ext,botZ]
+    ].map(p=>proj3D(p,rx,ry,cx,cy));
+    ctx.save(); ctx.beginPath();
+    plPts.forEach((p,i)=>i===0?ctx.moveTo(p.sx,p.sy):ctx.lineTo(p.sx,p.sy));
+    ctx.closePath();
+    ctx.fillStyle='rgba(26,107,90,0.13)'; ctx.fill();
+    ctx.setLineDash([8,4]); ctx.strokeStyle='rgba(15,110,86,0.7)'; ctx.lineWidth=1.8; ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='rgba(15,110,86,0.85)'; ctx.font=`600 10px 'DM Mono',monospace`;
+    ctx.textAlign='left'; ctx.fillText('σ (POS)',plPts[1].sx+7,plPts[1].sy);
+    ctx.restore();
+  }
+
+  function subBond(ringSp,subSp,wedgeW){
+    const dz=subSp.rz-ringSp.rz;
+    if(Math.abs(dz)<0.15) line(ctx,ringSp.sx,ringSp.sy,subSp.sx,subSp.sy,2.2);
+    else if(dz<0){
+      const dx=subSp.sx-ringSp.sx,dy=subSp.sy-ringSp.sy,n=6;
+      for(let s=0;s<n;s+=2){
+        const t0=s/n+0.04,t1=(s+1)/n-0.04;
+        ctx.beginPath(); ctx.moveTo(ringSp.sx+dx*t0,ringSp.sy+dy*t0);
+        ctx.lineTo(ringSp.sx+dx*t1,ringSp.sy+dy*t1);
+        ctx.strokeStyle='rgba(50,45,40,0.65)'; ctx.lineWidth=2.2; ctx.stroke();
+      }
+    } else solidWedge(ctx,ringSp.sx,ringSp.sy,subSp.sx,subSp.sy,wedgeW);
+  }
+
+  [[0,1],[1,2],[2,0]].forEach(([a,b])=>line(ctx,rp[a].sx,rp[a].sy,rp[b].sx,rp[b].sy,2.5));
+
+  const allSubs=[
+    {rIdx:0,sp:sp.c1_me,lbl:'Me',col:'#1a6b5a',r:14},
+    {rIdx:0,sp:sp.c1_h, lbl:'H', col:'#378ADD',r:9},
+    {rIdx:1,sp:sp.c2_me,lbl:'Me',col:'#1a6b5a',r:14},
+    {rIdx:1,sp:sp.c2_h, lbl:'H', col:'#378ADD',r:9},
+    {rIdx:2,sp:sp.c3_me,lbl:'Me',col:'#1a6b5a',r:14},
+    {rIdx:2,sp:sp.c3_h, lbl:'H', col:'#378ADD',r:9},
+  ];
+  const sorted=[...allSubs].sort((a,b)=>b.sp.rz-a.sp.rz);
+  sorted.forEach(({rIdx,sp:subSp,r})=>subBond(rp[rIdx],subSp,r===14?12:8));
+
+  rp.forEach((p,i)=>{
+    ctx.beginPath(); ctx.arc(p.sx,p.sy,5.5,0,Math.PI*2);
+    ctx.fillStyle='#1e1b16'; ctx.fill();
+  });
+  sorted.forEach(({sp:subSp,lbl,col,r})=>atomBall(ctx,subSp.sx,subSp.sy,r,col,lbl,lbl==='Me'?8:7));
+  ctx.restore();
+};
+
+// ── cis-1-Ethyl-3-methylcyclopropane (No POS) ────────────────────
+drawFns['cis13emcp']=function(){
+  const id='cis13emcp';
+  const c=document.getElementById('c-'+id);
+  const ctx=c.getContext('2d'); const W=c.width/DPR,H=c.height/DPR;
+  const cx=W/2, cy=H/2+8;
+  const {rx,ry}=cycRot[id];
+  ctx.save(); ctx.scale(DPR,DPR);
+  ctx.fillStyle='#ede9e0'; ctx.fillRect(0,0,W,H);
+
+  const R3=0.85, BH=1.15, SH=0.7;
+  const ring3D=[];
+  for(let i=0;i<3;i++){
+    const a=(i*120-90)*Math.PI/180;
+    ring3D.push([R3*Math.cos(a), 0, R3*Math.sin(a)]);
+  }
+  // C1=idx0(top): Ethyl, C3=idx2(lower-left): Methyl — both DOWN (cis)
+  const subs3D={
+    c1_et: [ring3D[0][0], -BH, ring3D[0][2]],  // C1 Et DOWN
+    c1_h:  [ring3D[0][0],  SH, ring3D[0][2]],  // C1 H UP
+    c3_me: [ring3D[2][0], -BH, ring3D[2][2]],  // C3 Me DOWN
+    c3_h:  [ring3D[2][0],  SH, ring3D[2][2]],  // C3 H UP
+  };
+
+  const rp=ring3D.map(p=>proj3D(p,rx,ry,cx,cy));
+  const sp={};
+  Object.entries(subs3D).forEach(([k,p])=>{sp[k]=proj3D(p,rx,ry,cx,cy);});
+
+  function subBond(ringSp,subSp,wedgeW){
+    const dz=subSp.rz-ringSp.rz;
+    if(Math.abs(dz)<0.15) line(ctx,ringSp.sx,ringSp.sy,subSp.sx,subSp.sy,2.2);
+    else if(dz<0){
+      const dx=subSp.sx-ringSp.sx,dy=subSp.sy-ringSp.sy,n=6;
+      for(let s=0;s<n;s+=2){
+        const t0=s/n+0.04,t1=(s+1)/n-0.04;
+        ctx.beginPath(); ctx.moveTo(ringSp.sx+dx*t0,ringSp.sy+dy*t0);
+        ctx.lineTo(ringSp.sx+dx*t1,ringSp.sy+dy*t1);
+        ctx.strokeStyle='rgba(50,45,40,0.65)'; ctx.lineWidth=2.2; ctx.stroke();
+      }
+    } else solidWedge(ctx,ringSp.sx,ringSp.sy,subSp.sx,subSp.sy,wedgeW);
+  }
+
+  [[0,1],[1,2],[2,0]].forEach(([a,b])=>line(ctx,rp[a].sx,rp[a].sy,rp[b].sx,rp[b].sy,2.5));
+
+  const allSubs=[
+    {rIdx:0,sp:sp.c1_et,lbl:'Et',col:'#c84b2f',r:16},
+    {rIdx:0,sp:sp.c1_h, lbl:'H', col:'#378ADD',r:9},
+    {rIdx:2,sp:sp.c3_me,lbl:'Me',col:'#1a6b5a',r:14},
+    {rIdx:2,sp:sp.c3_h, lbl:'H', col:'#378ADD',r:9},
+  ];
+  const sorted=[...allSubs].sort((a,b)=>b.sp.rz-a.sp.rz);
+  sorted.forEach(({rIdx,sp:subSp,r})=>subBond(rp[rIdx],subSp,r>14?12:8));
+
+  rp.forEach((p,i)=>{
+    ctx.beginPath(); ctx.arc(p.sx,p.sy,5.5,0,Math.PI*2);
+    ctx.fillStyle='#1e1b16'; ctx.fill();
+  });
+  sorted.forEach(({sp:subSp,lbl,col,r})=>atomBall(ctx,subSp.sx,subSp.sy,r,col,lbl,lbl==='Et'?8:lbl==='Me'?8:7));
+
+  // No POS label
+  ctx.fillStyle='rgba(200,75,47,0.7)'; ctx.font=`700 10px 'DM Mono',monospace`;
+  ctx.textAlign='center';
+  ctx.fillText('No POS — Et ≠ Me',cx,H-12);
+  ctx.restore();
+};
+
+// ═══ ALLENE SYSTEM ═══════════════════════════════════════════════════
+const alleneConfigs={
+  allene1:{atoms:['a','a','a','a'],pos:'xz'},
+  allene2:{atoms:['a','a','a','b'],pos:'xy'},
+  allene3:{atoms:['a','a','b','b'],pos:'xz'},
+  allene4:{atoms:['a','b','a','b'],pos:null},
+  allene5:{atoms:['a','b','b','a'],pos:null},
+  allene6:{atoms:['a','b','c','d'],pos:null}
+};
+
+const alleneColors={a:'#1a6b5a',b:'#c84b2f',c:'#d4a373',d:'#6b7c9e'};
+const alleneRot={};
+
+function p3d_allene(x,y,z,rx,ry,cx,cy,s){
+  const crx=Math.cos(rx*Math.PI/180),srx=Math.sin(rx*Math.PI/180);
+  const cry=Math.cos(ry*Math.PI/180),sry=Math.sin(ry*Math.PI/180);
+  let x1=x*cry+z*sry,z1=-x*sry+z*cry;
+  let y2=y*crx-z1*srx,z2=y*srx+z1*crx;
+  return{x:cx+x1*s,y:cy+y2*s,z:z2};
+}
+
+function drawAlleneCylinder(ctx,p1,p2,r){
+  const dx=p2.x-p1.x,dy=p2.y-p1.y,len=Math.hypot(dx,dy),ang=Math.atan2(dy,dx);
+  ctx.save();
+  ctx.translate(p1.x,p1.y);
+  ctx.rotate(ang);
+  const g=ctx.createLinearGradient(0,-r,0,r);
+  g.addColorStop(0,'#aaa');
+  g.addColorStop(0.35,'#eee');
+  g.addColorStop(0.5,'#fff');
+  g.addColorStop(0.65,'#ddd');
+  g.addColorStop(1,'#999');
+  ctx.fillStyle=g;
+  ctx.fillRect(0,-r,len,r*2);
+  ctx.restore();
+}
+
+function drawAlleneSphere(ctx,p,r,col,lbl){
+  const g=ctx.createRadialGradient(p.x-r*0.4,p.y-r*0.4,r*0.1,p.x,p.y,r*1.4);
+  if(col==='dark'){
+    g.addColorStop(0,'#999');
+    g.addColorStop(0.4,'#666');
+    g.addColorStop(0.8,'#444');
+    g.addColorStop(1,'#222');
+  }else{
+    const n=parseInt(col.replace('#',''),16);
+    const [R,G,B]=[(n>>16)&255,(n>>8)&255,n&255];
+    g.addColorStop(0,`rgb(${Math.min(255,R+80)},${Math.min(255,G+80)},${Math.min(255,B+80)})`);
+    g.addColorStop(0.4,`rgb(${R},${G},${B})`);
+    g.addColorStop(0.8,`rgb(${Math.max(0,R-40)},${Math.max(0,G-40)},${Math.max(0,B-40)})`);
+    g.addColorStop(1,`rgb(${Math.max(0,R-80)},${Math.max(0,G-80)},${Math.max(0,B-80)})`);
+  }
+  ctx.fillStyle=g;
+  ctx.beginPath();ctx.arc(p.x,p.y,r,0,7);ctx.fill();
+  
+  const h=ctx.createRadialGradient(p.x-r*0.35,p.y-r*0.35,0,p.x-r*0.35,p.y-r*0.35,r*0.7);
+  h.addColorStop(0,'rgba(255,255,255,0.9)');
+  h.addColorStop(0.5,'rgba(255,255,255,0.3)');
+  h.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=h;
+  ctx.beginPath();ctx.arc(p.x,p.y,r,0,7);ctx.fill();
+  
+  if(lbl){
+    ctx.fillStyle='#fff';
+    ctx.font='bold 14px "DM Sans",sans-serif';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.shadowColor='rgba(0,0,0,0.6)';
+    ctx.shadowBlur=3;
+    ctx.fillText(lbl,p.x,p.y);
+    ctx.shadowBlur=0;
+  }
+}
+
+function drawAllenePlane(ctx,verts,col){
+  ctx.save();
+  ctx.beginPath();
+  verts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.closePath();
+  ctx.fillStyle=col.replace('1)','0.2)');
+  ctx.fill();
+  ctx.strokeStyle=col.replace('1)','0.65)');
+  ctx.lineWidth=2;
+  ctx.stroke();
+  ctx.restore();
+}
+
+function initAlleneDrag(id){
+  const c=document.getElementById('c-'+id);
+  if(!c)return;
+  alleneRot[id]={rx:15,ry:0};
+  c.addEventListener('mousedown',e=>{c._d=1;c._lx=e.clientX;c._ly=e.clientY;});
+  window.addEventListener('mousemove',e=>{
+    if(!c._d)return;
+    alleneRot[id].ry+=(e.clientX-c._lx)*0.4;
+    alleneRot[id].rx+=(e.clientY-c._ly)*0.4;
+    alleneRot[id].rx=Math.max(-60,Math.min(60,alleneRot[id].rx));
+    c._lx=e.clientX;c._ly=e.clientY;
+    drawFns[id]&&drawFns[id]();
+  });
+  window.addEventListener('mouseup',()=>c._d=0);
+}
+
+['allene1','allene2','allene3','allene4','allene5','allene6'].forEach(id=>{
+  drawFns[id]=function(){
+    const c=document.getElementById('c-'+id);
+    if(!c)return;
+    const ctx=c.getContext('2d');
+    const W=c.width/DPR,H=c.height/DPR,cx=W/2,cy=H/2+45,s=140;
+    const cfg=alleneConfigs[id];
+    const {rx,ry}=alleneRot[id]||{rx:15,ry:0};
+    
+    ctx.clearRect(0,0,c.width,c.height);
+    
+    const [blue_top,blue_bot,green_top,green_bot]=cfg.atoms;
+    
+    // Shift the entire molecule to center it properly
+    const shift = 0.85;
+    const atoms=[
+      {p:[-1.34+shift,0,0],r:26,col:'dark',lbl:'C'},
+      {p:[0+shift,0,0],r:26,col:'dark',lbl:'C'},
+      {p:[1.34+shift,0,0],r:26,col:'dark',lbl:'C'},
+      {p:[-1.885+shift,0,0.944],r:22,col:alleneColors[blue_top],lbl:blue_top},
+      {p:[-1.885+shift,0,-0.944],r:22,col:alleneColors[blue_bot],lbl:blue_bot},
+      {p:[1.885+shift,0.944,0],r:22,col:alleneColors[green_top],lbl:green_top},
+      {p:[1.885+shift,-0.944,0],r:22,col:alleneColors[green_bot],lbl:green_bot},
+    ];
+    
+    const pa=atoms.map(a=>({...a,pr:p3d_allene(...a.p,rx,ry,cx,cy,s)}));
+    
+    let items=[...pa.map((a,i)=>({type:'atom',data:a,z:a.pr.z}))];
+    
+    if(posState[id] && cfg.pos==='xz'){
+      const posV=[[-2.2+shift,0,-1.3],[2.2+shift,0,-1.3],[2.2+shift,0,1.3],[-2.2+shift,0,1.3]].map(v=>p3d_allene(...v,rx,ry,cx,cy,s));
+      items.push({type:'plane',verts:posV,col:'rgba(100,150,255,1)',z:posV.reduce((s,v)=>s+v.z,0)/4});
+    }else if(posState[id] && cfg.pos==='xy'){
+      const posV=[[-1+shift,1.3,0],[2.2+shift,1.3,0],[2.2+shift,-1.3,0],[-1+shift,-1.3,0]].map(v=>p3d_allene(...v,rx,ry,cx,cy,s));
+      items.push({type:'plane',verts:posV,col:'rgba(100,255,150,1)',z:posV.reduce((s,v)=>s+v.z,0)/4});
+    }
+    
+    items.sort((a,b)=>b.z-a.z);
+    
+    [[0,1],[1,2],[0,3],[0,4],[2,5],[2,6]].forEach(([i,j])=>{
+      const p1=pa[i].pr,p2=pa[j].pr;
+      if(i<2){
+        const dx=p2.x-p1.x,dy=p2.y-p1.y,l=Math.hypot(dx,dy);
+        const nx=-dy/l*8,ny=dx/l*8;
+        drawAlleneCylinder(ctx,{x:p1.x+nx,y:p1.y+ny},{x:p2.x+nx,y:p2.y+ny},6.5);
+        drawAlleneCylinder(ctx,{x:p1.x-nx,y:p1.y-ny},{x:p2.x-nx,y:p2.y-ny},6.5);
+      }else{
+        drawAlleneCylinder(ctx,p1,p2,6.5);
+      }
+    });
+    
+    items.forEach(item=>{
+      if(item.type==='plane'){
+        drawAllenePlane(ctx,item.verts,item.col);
+      }else{
+        drawAlleneSphere(ctx,item.data.pr,item.data.r,item.data.col,item.data.lbl);
+      }
+    });
+  };
+});
+
+// ═══ SPIRO COMPOUNDS ════════════════════════════════════════════════
+const spiroRot = {};
+
+function initSpiroDrag(id){
+  const c=document.getElementById('c-'+id);
+  if(!c)return;
+  spiroRot[id]={rx:20,ry:30};
+  c.addEventListener('mousedown',e=>{c._d=1;c._lx=e.clientX;c._ly=e.clientY;});
+  window.addEventListener('mousemove',e=>{
+    if(!c._d)return;
+    spiroRot[id].ry+=(e.clientX-c._lx)*0.4;
+    spiroRot[id].rx+=(e.clientY-c._ly)*0.4;
+    spiroRot[id].rx=Math.max(-60,Math.min(60,spiroRot[id].rx));
+    c._lx=e.clientX;c._ly=e.clientY;
+    drawFns[id]&&drawFns[id]();
+  });
+  window.addEventListener('mouseup',()=>c._d=0);
+}
+
+function p3d_spiro(x,y,z,rx,ry,cx,cy,s){
+  const crx=Math.cos(rx*Math.PI/180),srx=Math.sin(rx*Math.PI/180);
+  const cry=Math.cos(ry*Math.PI/180),sry=Math.sin(ry*Math.PI/180);
+  let x1=x*cry+z*sry,z1=-x*sry+z*cry;
+  let y2=y*crx-z1*srx,z2=y*srx+z1*crx;
+  return{x:cx+x1*s,y:cy+y2*s,z:z2};
+}
+
+// Helper: Draw a 3D cylinder bond
+function draw3DCylinder(ctx, x1, y1, z1, x2, y2, z2, radius, col) {
+  const dx = x2 - x1, dy = y2 - y1, dz = z2 - z1;
+  const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+  if(len < 0.01) return;
+  
+  // Draw as tapered stick with depth shading
+  const midZ = (z1 + z2) / 2;
+  const brightness = 0.6 + 0.4 * (midZ / 100); // Closer = brighter
+  
+  const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+  gradient.addColorStop(0, `rgba(180,180,180,${brightness})`);
+  gradient.addColorStop(0.5, `rgba(220,220,220,${brightness})`);
+  gradient.addColorStop(1, `rgba(180,180,180,${brightness})`);
+  
+  ctx.strokeStyle = gradient;
+  ctx.lineWidth = radius * 2;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+}
+
+// Helper: Draw a 3D glossy sphere
+function draw3DSphere(ctx, x, y, z, radius, baseColor) {
+  // Depth-based brightness
+  const brightness = 0.7 + 0.3 * (z / 100);
+  
+  // Parse base color
+  const colorMap = {
+    '#1a1a1a': [26, 26, 26],      // Black carbon
+    '#3d3d3d': [61, 61, 61],      // Dark gray
+    '#2d8a2d': [45, 138, 45],     // Green (Cl)
+  };
+  
+  let [r, g, b] = colorMap[baseColor] || [100, 100, 100];
+  r = Math.min(255, r * brightness);
+  g = Math.min(255, g * brightness);
+  b = Math.min(255, b * brightness);
+  
+  // Main sphere with gradient
+  const gradient = ctx.createRadialGradient(
+    x - radius * 0.3, y - radius * 0.3, 0,
+    x, y, radius
+  );
+  gradient.addColorStop(0, `rgb(${Math.min(255, r + 80)},${Math.min(255, g + 80)},${Math.min(255, b + 80)})`);
+  gradient.addColorStop(0.4, `rgb(${r},${g},${b})`);
+  gradient.addColorStop(1, `rgb(${Math.max(0, r - 40)},${Math.max(0, g - 40)},${Math.max(0, b - 40)})`);
+  
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.fillStyle = gradient;
+  ctx.fill();
+  
+  // Glossy highlight
+  const highlight = ctx.createRadialGradient(
+    x - radius * 0.35, y - radius * 0.35, 0,
+    x - radius * 0.2, y - radius * 0.2, radius * 0.6
+  );
+  highlight.addColorStop(0, 'rgba(255,255,255,0.7)');
+  highlight.addColorStop(0.5, 'rgba(255,255,255,0.2)');
+  highlight.addColorStop(1, 'rgba(255,255,255,0)');
+  
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.fillStyle = highlight;
+  ctx.fill();
+  
+  // Subtle shadow outline
+  ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+}
+
+// Spiro[4.4]nonane - two 5-membered rings with realistic 3D rendering
+drawFns['spiro44']=function(){
+  const c=document.getElementById('c-spiro44');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  const W=c.width/DPR,H=c.height/DPR,cx=W/2,cy=H/2,s=45;
+  const {rx,ry}=spiroRot['spiro44']||{rx:25,ry:35};
+  
+  ctx.clearRect(0,0,c.width,c.height);
+  
+  // Spiro center at origin
+  const ang1=2*Math.PI/5;
+  const r1=1.3, r2=1.3;
+  
+  const atoms=[
+    {p:[0,0,0],r:14,col:'#1a1a1a',lbl:''},  // spiro center - black
+    // Ring 1 (5 carbons in XY plane)
+    {p:[r1*Math.cos(0*ang1),r1*Math.sin(0*ang1),0],r:13,col:'#3d3d3d',lbl:''},
+    {p:[r1*Math.cos(1*ang1),r1*Math.sin(1*ang1),0],r:13,col:'#3d3d3d',lbl:''},
+    {p:[r1*Math.cos(2*ang1),r1*Math.sin(2*ang1),0],r:13,col:'#3d3d3d',lbl:''},
+    {p:[r1*Math.cos(3*ang1),r1*Math.sin(3*ang1),0],r:13,col:'#3d3d3d',lbl:''},
+    // Ring 2 (5 carbons in YZ plane)
+    {p:[0,r2*Math.cos(0*ang1),r2*Math.sin(0*ang1)],r:13,col:'#3d3d3d',lbl:''},
+    {p:[0,r2*Math.cos(1*ang1),r2*Math.sin(1*ang1)],r:13,col:'#3d3d3d',lbl:''},
+    {p:[0,r2*Math.cos(2*ang1),r2*Math.sin(2*ang1)],r:13,col:'#3d3d3d',lbl:''},
+    {p:[0,r2*Math.cos(3*ang1),r2*Math.sin(3*ang1)],r:13,col:'#3d3d3d',lbl:''},
+  ];
+  
+  const pa=atoms.map(a=>({...a,pr:p3d_spiro(...a.p,rx,ry,cx,cy,s)}));
+  
+  const bonds=[
+    [0,1],[1,2],[2,3],[3,4],[4,0], // Ring 1
+    [0,5],[5,6],[6,7],[7,8],[8,0]  // Ring 2
+  ];
+  
+  // POS planes if enabled - draw first (behind)
+  if(posState['spiro44']){
+    const posXY=[[-2.5,-2.5,0],[2.5,-2.5,0],[2.5,2.5,0],[-2.5,2.5,0]].map(v=>p3d_spiro(...v,rx,ry,cx,cy,s));
+    const posYZ=[[0,-2.5,-2.5],[0,2.5,-2.5],[0,2.5,2.5],[0,-2.5,2.5]].map(v=>p3d_spiro(...v,rx,ry,cx,cy,s));
+    
+    [
+      {verts:posXY, col:'rgba(100,150,255,0.18)'},
+      {verts:posYZ, col:'rgba(255,150,100,0.18)'}
+    ].forEach(plane=>{
+      ctx.beginPath();
+      plane.verts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+      ctx.closePath();
+      ctx.fillStyle=plane.col;
+      ctx.fill();
+      ctx.strokeStyle=plane.col.replace('0.18','0.35');
+      ctx.lineWidth=1.5;
+      ctx.setLineDash([5,3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    });
+  }
+  
+  // Z-sort bonds and atoms for proper depth
+  const bondData = bonds.map(([i,j])=>({
+    i, j,
+    z: (pa[i].pr.z + pa[j].pr.z) / 2,
+    type: 'bond'
+  }));
+  const atomData = pa.map((a,i)=>({
+    idx: i,
+    z: a.pr.z,
+    type: 'atom',
+    data: a
+  }));
+  
+  const renderList = [...bondData, ...atomData].sort((a,b) => a.z - b.z);
+  
+  // Render in depth order
+  renderList.forEach(item => {
+    if(item.type === 'bond') {
+      const p1 = pa[item.i].pr, p2 = pa[item.j].pr;
+      draw3DCylinder(ctx, p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, 3, '#bbb');
+    } else {
+      const a = item.data;
+      draw3DSphere(ctx, a.pr.x, a.pr.y, a.pr.z, a.r, a.col);
+    }
+  });
+};
+
+// Spiro[4.5]decane - 5-ring and 6-ring with realistic 3D rendering
+drawFns['spiro45']=function(){
+  const c=document.getElementById('c-spiro45');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  const W=c.width/DPR,H=c.height/DPR,cx=W/2,cy=H/2,s=40;
+  const {rx,ry}=spiroRot['spiro45']||{rx:25,ry:35};
+  
+  ctx.clearRect(0,0,c.width,c.height);
+  
+  const ang5=2*Math.PI/5;
+  const ang6=2*Math.PI/6;
+  const r1=1.3, r2=1.4;
+  
+  const atoms=[
+    {p:[0,0,0],r:14,col:'#1a1a1a',lbl:''},  // spiro center - black
+    // Ring 1 (5-membered in XY plane)
+    {p:[r1*Math.cos(0*ang5),r1*Math.sin(0*ang5),0],r:13,col:'#3d3d3d',lbl:''},
+    {p:[r1*Math.cos(1*ang5),r1*Math.sin(1*ang5),0],r:13,col:'#3d3d3d',lbl:''},
+    {p:[r1*Math.cos(2*ang5),r1*Math.sin(2*ang5),0],r:13,col:'#3d3d3d',lbl:''},
+    {p:[r1*Math.cos(3*ang5),r1*Math.sin(3*ang5),0],r:13,col:'#3d3d3d',lbl:''},
+    // Ring 2 (6-membered in YZ plane)
+    {p:[0,r2*Math.cos(0*ang6),r2*Math.sin(0*ang6)],r:13,col:'#3d3d3d',lbl:''},
+    {p:[0,r2*Math.cos(1*ang6),r2*Math.sin(1*ang6)],r:13,col:'#3d3d3d',lbl:''},
+    {p:[0,r2*Math.cos(2*ang6),r2*Math.sin(2*ang6)],r:13,col:'#3d3d3d',lbl:''},
+    {p:[0,r2*Math.cos(3*ang6),r2*Math.sin(3*ang6)],r:13,col:'#3d3d3d',lbl:''},
+    {p:[0,r2*Math.cos(4*ang6),r2*Math.sin(4*ang6)],r:13,col:'#3d3d3d',lbl:''},
+  ];
+  
+  const pa=atoms.map(a=>({...a,pr:p3d_spiro(...a.p,rx,ry,cx,cy,s)}));
+  
+  const bonds=[
+    [0,1],[1,2],[2,3],[3,4],[4,0],
+    [0,5],[5,6],[6,7],[7,8],[8,9],[9,0]
+  ];
+  
+  // Z-sort bonds and atoms for proper depth
+  const bondData = bonds.map(([i,j])=>({
+    i, j,
+    z: (pa[i].pr.z + pa[j].pr.z) / 2,
+    type: 'bond'
+  }));
+  const atomData = pa.map((a,i)=>({
+    idx: i,
+    z: a.pr.z,
+    type: 'atom',
+    data: a
+  }));
+  
+  const renderList = [...bondData, ...atomData].sort((a,b) => a.z - b.z);
+  
+  // Render in depth order
+  renderList.forEach(item => {
+    if(item.type === 'bond') {
+      const p1 = pa[item.i].pr, p2 = pa[item.j].pr;
+      draw3DCylinder(ctx, p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, 3, '#bbb');
+    } else {
+      const a = item.data;
+      draw3DSphere(ctx, a.pr.x, a.pr.y, a.pr.z, a.r, a.col);
+    }
+  });
+};
+
+// ═══ BIPHENYL ═══════════════════════════════════════════════════════
+// Helper to create a benzene ring in 3D space
+function createBenzeneRing(centerX, centerY, centerZ, normalX, normalY, normalZ, upX, upY, upZ, radius) {
+  // normalX,Y,Z is the normal to the ring plane
+  // upX,Y,Z is the "up" direction in the ring plane
+  
+  // Normalize vectors
+  const nLen = Math.sqrt(normalX*normalX + normalY*normalY + normalZ*normalZ);
+  const nx = normalX/nLen, ny = normalY/nLen, nz = normalZ/nLen;
+  
+  const uLen = Math.sqrt(upX*upX + upY*upY + upZ*upZ);
+  let ux = upX/uLen, uy = upY/uLen, uz = upZ/uLen;
+  
+  // Make up orthogonal to normal (Gram-Schmidt)
+  const dot = ux*nx + uy*ny + uz*nz;
+  ux -= dot*nx; uy -= dot*ny; uz -= dot*nz;
+  const uLen2 = Math.sqrt(ux*ux + uy*uy + uz*uz);
+  ux /= uLen2; uy /= uLen2; uz /= uLen2;
+  
+  // Right vector (cross product of normal and up)
+  const rx = ny*uz - nz*uy;
+  const ry = nz*ux - nx*uz;
+  const rz = nx*uy - ny*ux;
+  
+  const atoms = [];
+  for(let i = 0; i < 6; i++) {
+    const angle = i * Math.PI / 3;
+    const cosA = Math.cos(angle);
+    const sinA = Math.sin(angle);
+    
+    atoms.push({
+      p: [
+        centerX + radius * (cosA * rx + sinA * ux),
+        centerY + radius * (cosA * ry + sinA * uy),
+        centerZ + radius * (cosA * rz + sinA * uz)
+      ],
+      r: 9,
+      col: '#888',
+      lbl: 'C'
+    });
+  }
+  
+  return atoms;
+}
+
+// Biphenyl - Planar conformation
+drawFns['biphenyl-planar'] = function() {
+  const c = document.getElementById('c-biphenyl-planar');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width/DPR, H = c.height/DPR, cx = W/2, cy = H/2, s = 40;
+  const {rx, ry} = spiroRot['biphenyl-planar'] || {rx: 20, ry: 25};
+  
+  ctx.clearRect(0, 0, c.width, c.height);
+  
+  // Create two benzene rings in the same plane (coplanar)
+  const r = 1.2;
+  const ring1 = createBenzeneRing(-1.4, 0, 0, 0, 0, 1, 0, 1, 0, r);
+  const ring2 = createBenzeneRing(1.4, 0, 0, 0, 0, 1, 0, 1, 0, r);
+  
+  // Central C-C bond atoms
+  const bridge1 = {p: [-0.2, 0, 0], r: 9, col: '#666', lbl: 'C'};
+  const bridge2 = {p: [0.2, 0, 0], r: 9, col: '#666', lbl: 'C'};
+  
+  const atoms = [...ring1.slice(0, 5), bridge1, ...ring2.slice(1, 6), bridge2];
+  const pa = atoms.map(a => ({...a, pr: p3d_spiro(...a.p, rx, ry, cx, cy, s)}));
+  
+  // Bonds
+  const bonds = [
+    // Ring 1
+    [0,1],[1,2],[2,3],[3,4],[4,5],[5,0],
+    // Bridge
+    [5,6],
+    // Ring 2
+    [6,7],[7,8],[8,9],[9,10],[10,11],[11,6]
+  ];
+  
+  // POS planes if enabled
+  let items = [];
+  if(posState['biphenyl-planar']) {
+    // Molecular plane (coplanar rings)
+    const plane1 = [[-3.5, -2, 0], [3.5, -2, 0], [3.5, 2, 0], [-3.5, 2, 0]].map(v => p3d_spiro(...v, rx, ry, cx, cy, s));
+    items.push({type: 'plane', verts: plane1, col: 'rgba(100,150,255,0.25)', z: 0});
+    
+    // Vertical plane through C-C bridge
+    const plane2 = [[-0.5, -2.5, -2], [-0.5, 2.5, -2], [-0.5, 2.5, 2], [-0.5, -2.5, 2]].map(v => p3d_spiro(...v, rx, ry, cx, cy, s));
+    items.push({type: 'plane', verts: plane2, col: 'rgba(255,150,100,0.25)', z: 0});
+    
+    // Vertical plane perpendicular to C-C bridge
+    const plane3 = [[-3, 0, -2], [3, 0, -2], [3, 0, 2], [-3, 0, 2]].map(v => p3d_spiro(...v, rx, ry, cx, cy, s));
+    items.push({type: 'plane', verts: plane3, col: 'rgba(150,255,100,0.25)', z: 0});
+  }
+  
+  // Draw bonds
+  bonds.forEach(([i, j]) => {
+    const p1 = pa[i].pr, p2 = pa[j].pr;
+    ctx.strokeStyle = '#999';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.stroke();
+  });
+  
+  // Draw planes
+  items.forEach(item => {
+    if(item.type === 'plane') {
+      ctx.beginPath();
+      item.verts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+      ctx.closePath();
+      ctx.fillStyle = item.col;
+      ctx.fill();
+      ctx.strokeStyle = item.col.replace('0.25', '0.5');
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  });
+  
+  // Draw atoms
+  pa.forEach(a => {
+    const g = ctx.createRadialGradient(a.pr.x - a.r*0.3, a.pr.y - a.r*0.3, 0, a.pr.x, a.pr.y, a.r);
+    g.addColorStop(0, '#ddd');
+    g.addColorStop(1, a.col);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(a.pr.x, a.pr.y, a.r, 0, 7);
+    ctx.fill();
+  });
+};
+
+// Biphenyl - Perpendicular conformation
+drawFns['biphenyl-perp'] = function() {
+  const c = document.getElementById('c-biphenyl-perp');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width/DPR, H = c.height/DPR, cx = W/2, cy = H/2, s = 40;
+  const {rx, ry} = spiroRot['biphenyl-perp'] || {rx: 20, ry: 25};
+  
+  ctx.clearRect(0, 0, c.width, c.height);
+  
+  // Ring 1 in XY plane
+  const r = 1.2;
+  const ring1 = createBenzeneRing(-1.4, 0, 0, 0, 0, 1, 0, 1, 0, r);
+  
+  // Ring 2 in YZ plane (perpendicular to ring 1)
+  const ring2 = createBenzeneRing(1.4, 0, 0, 1, 0, 0, 0, 1, 0, r);
+  
+  // Central C-C bond atoms
+  const bridge1 = {p: [-0.2, 0, 0], r: 9, col: '#666', lbl: 'C'};
+  const bridge2 = {p: [0.2, 0, 0], r: 9, col: '#666', lbl: 'C'};
+  
+  const atoms = [...ring1.slice(0, 5), bridge1, ...ring2.slice(1, 6), bridge2];
+  const pa = atoms.map(a => ({...a, pr: p3d_spiro(...a.p, rx, ry, cx, cy, s)}));
+  
+  // Bonds
+  const bonds = [
+    [0,1],[1,2],[2,3],[3,4],[4,5],[5,0],
+    [5,6],
+    [6,7],[7,8],[8,9],[9,10],[10,11],[11,6]
+  ];
+  
+  // POS planes if enabled
+  let items = [];
+  if(posState['biphenyl-perp']) {
+    // Vertical plane containing ring 1
+    const plane1 = [[-3, -2.5, -2], [-3, 2.5, -2], [-3, 2.5, 2], [-3, -2.5, 2]].map(v => p3d_spiro(...v, rx, ry, cx, cy, s));
+    items.push({type: 'plane', verts: plane1, col: 'rgba(100,150,255,0.25)', z: 0});
+    
+    // Vertical plane containing ring 2
+    const plane2 = [[-2.5, -2.5, 0], [2.5, -2.5, 0], [2.5, 2.5, 0], [-2.5, 2.5, 0]].map(v => p3d_spiro(...v, rx, ry, cx, cy, s));
+    items.push({type: 'plane', verts: plane2, col: 'rgba(255,150,100,0.25)', z: 0});
+  }
+  
+  // Draw bonds
+  bonds.forEach(([i, j]) => {
+    const p1 = pa[i].pr, p2 = pa[j].pr;
+    ctx.strokeStyle = '#999';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.stroke();
+  });
+  
+  // Draw planes
+  items.forEach(item => {
+    if(item.type === 'plane') {
+      ctx.beginPath();
+      item.verts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+      ctx.closePath();
+      ctx.fillStyle = item.col;
+      ctx.fill();
+      ctx.strokeStyle = item.col.replace('0.25', '0.5');
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  });
+  
+  // Draw atoms
+  pa.forEach(a => {
+    const g = ctx.createRadialGradient(a.pr.x - a.r*0.3, a.pr.y - a.r*0.3, 0, a.pr.x, a.pr.y, a.r);
+    g.addColorStop(0, '#ddd');
+    g.addColorStop(1, a.col);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(a.pr.x, a.pr.y, a.r, 0, 7);
+    ctx.fill();
+  });
+};
+
+// 4,4'-Dichlorobiphenyl (planar with Cl substituents)
+drawFns['44biphenyl'] = function() {
+  const c = document.getElementById('c-44biphenyl');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width/DPR, H = c.height/DPR, cx = W/2, cy = H/2, s = 40;
+  const {rx, ry} = spiroRot['44biphenyl'] || {rx: 20, ry: 25};
+  
+  ctx.clearRect(0, 0, c.width, c.height);
+  
+  // Create two benzene rings in the same plane
+  const r = 1.2;
+  const ring1 = createBenzeneRing(-1.4, 0, 0, 0, 0, 1, 0, 1, 0, r);
+  const ring2 = createBenzeneRing(1.4, 0, 0, 0, 0, 1, 0, 1, 0, r);
+  
+  // Central C-C bond atoms
+  const bridge1 = {p: [-0.2, 0, 0], r: 9, col: '#666', lbl: 'C'};
+  const bridge2 = {p: [0.2, 0, 0], r: 9, col: '#666', lbl: 'C'};
+  
+  // Chlorine atoms at para positions (4 and 4')
+  const cl1 = {p: [-2.6, 0, 0], r: 12, col: '#4a9d4a', lbl: 'Cl'};
+  const cl2 = {p: [2.6, 0, 0], r: 12, col: '#4a9d4a', lbl: 'Cl'};
+  
+  const atoms = [...ring1.slice(0, 5), bridge1, ...ring2.slice(1, 6), bridge2, cl1, cl2];
+  const pa = atoms.map(a => ({...a, pr: p3d_spiro(...a.p, rx, ry, cx, cy, s)}));
+  
+  // Bonds
+  const bonds = [
+    [0,1],[1,2],[2,3],[3,4],[4,5],[5,0],
+    [5,6],
+    [6,7],[7,8],[8,9],[9,10],[10,11],[11,6],
+    [2,12], [9,13] // Cl bonds
+  ];
+  
+  // POS planes if enabled
+  let items = [];
+  if(posState['44biphenyl']) {
+    // Molecular plane
+    const plane1 = [[-4, -2, 0], [4, -2, 0], [4, 2, 0], [-4, 2, 0]].map(v => p3d_spiro(...v, rx, ry, cx, cy, s));
+    items.push({type: 'plane', verts: plane1, col: 'rgba(100,150,255,0.25)', z: 0});
+    
+    // Vertical plane through Cl-Cl axis
+    const plane2 = [[-3.5, 0, -2], [3.5, 0, -2], [3.5, 0, 2], [-3.5, 0, 2]].map(v => p3d_spiro(...v, rx, ry, cx, cy, s));
+    items.push({type: 'plane', verts: plane2, col: 'rgba(255,150,100,0.25)', z: 0});
+  }
+  
+  // Draw bonds
+  bonds.forEach(([i, j]) => {
+    const p1 = pa[i].pr, p2 = pa[j].pr;
+    ctx.strokeStyle = '#999';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.stroke();
+  });
+  
+  // Draw planes
+  items.forEach(item => {
+    if(item.type === 'plane') {
+      ctx.beginPath();
+      item.verts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+      ctx.closePath();
+      ctx.fillStyle = item.col;
+      ctx.fill();
+      ctx.strokeStyle = item.col.replace('0.25', '0.5');
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  });
+  
+  // Draw atoms
+  pa.forEach(a => {
+    const g = ctx.createRadialGradient(a.pr.x - a.r*0.3, a.pr.y - a.r*0.3, 0, a.pr.x, a.pr.y, a.r);
+    g.addColorStop(0, '#ddd');
+    g.addColorStop(1, a.col);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(a.pr.x, a.pr.y, a.r, 0, 7);
+    ctx.fill();
+  });
+};
+
+// ═══ INIT ══════════════════════════════════════════════════════════
+// ═══ BIPHENYL CONFORMATIONS ═════════════════════════════════════════
+// Planar biphenyl - both rings in same XY plane
+drawFns['biphenyl-planar'] = function() {
+  const id = 'biphenyl-planar';
+  const c = document.getElementById('c-' + id);
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width/DPR, H = c.height/DPR;
+  const cx = W/2, cy = H/2, s = 30;
+  const {rx, ry} = cycRot[id] || {rx: 15, ry: 0};
+  
+  ctx.save();
+  ctx.scale(DPR, DPR);
+  ctx.fillStyle = '#ede9e0';
+  ctx.fillRect(0, 0, W, H);
+  
+  // Both rings in XY plane
+  const r = 1.4;
+  const ring1 = [], ring2 = [];
+  
+  for(let i = 0; i < 6; i++) {
+    const angle = i * (Math.PI / 3);
+    ring1.push([-2.5 + r * Math.cos(angle), r * Math.sin(angle), 0]);
+  }
+  
+  for(let i = 0; i < 6; i++) {
+    const angle = i * (Math.PI / 3) + Math.PI;
+    ring2.push([2.5 + r * Math.cos(angle), r * Math.sin(angle), 0]);
+  }
+  
+  // Substituents
+  const subs = [
+    [ring1[1][0] + 1.2 * Math.cos(Math.PI/3), ring1[1][1] + 1.2 * Math.sin(Math.PI/3), 0, 'X'],
+    [ring1[5][0] + 1.2 * Math.cos(5*Math.PI/3), ring1[5][1] + 1.2 * Math.sin(5*Math.PI/3), 0, 'Y'],
+    [ring2[1][0] + 1.2 * Math.cos(Math.PI/3 + Math.PI), ring2[1][1] + 1.2 * Math.sin(Math.PI/3 + Math.PI), 0, 'a'],
+    [ring2[5][0] + 1.2 * Math.cos(5*Math.PI/3 + Math.PI), ring2[5][1] + 1.2 * Math.sin(5*Math.PI/3 + Math.PI), 0, 'b']
+  ];
+  
+  // Project all
+  const r1p = ring1.map(a => p3d_spiro(...a, rx, ry, cx, cy, s));
+  const r2p = ring2.map(a => p3d_spiro(...a, rx, ry, cx, cy, s));
+  const sp = subs.map(a => ({lbl: a[3], pr: p3d_spiro(a[0], a[1], a[2], rx, ry, cx, cy, s)}));
+  
+  // POS plane (molecular plane - all atoms in XY plane)
+  if(posState[id]) {
+    const plane = [[-5, -3, 0], [5, -3, 0], [5, 3, 0], [-5, 3, 0]].map(v => p3d_spiro(...v, rx, ry, cx, cy, s));
+    ctx.fillStyle = 'rgba(26,107,90,0.12)';
+    ctx.beginPath();
+    plane.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(15,110,86,0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([5, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  
+  // Draw rings
+  ctx.strokeStyle = '#2d3748';
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  for(let i = 0; i < 6; i++) {
+    ctx.beginPath();
+    ctx.moveTo(r1p[i].x, r1p[i].y);
+    ctx.lineTo(r1p[(i+1)%6].x, r1p[(i+1)%6].y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(r2p[i].x, r2p[i].y);
+    ctx.lineTo(r2p[(i+1)%6].x, r2p[(i+1)%6].y);
+    ctx.stroke();
+  }
+  
+  // Central bond
+  ctx.strokeStyle = '#c84b2f';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(r1p[0].x, r1p[0].y);
+  ctx.lineTo(r2p[0].x, r2p[0].y);
+  ctx.stroke();
+  
+  // Substituent bonds
+  ctx.strokeStyle = '#4299e1';
+  ctx.lineWidth = 2.5;
+  [0, 1, 2, 3].forEach(si => {
+    const rp = si < 2 ? r1p : r2p;
+    const idx = (si % 2 === 0) ? 1 : 5;
+    ctx.beginPath();
+    ctx.moveTo(rp[idx].x, rp[idx].y);
+    ctx.lineTo(sp[si].pr.x, sp[si].pr.y);
+    ctx.stroke();
+  });
+  
+  // Draw atoms
+  ctx.fillStyle = '#666';
+  [...r1p, ...r2p].forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 4, 0, 7);
+    ctx.fill();
+  });
+  
+  // Substituent atoms with labels
+  sp.forEach(s => {
+    ctx.fillStyle = '#4299e1';
+    ctx.beginPath();
+    ctx.arc(s.pr.x, s.pr.y, 12, 0, 7);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 11px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(s.lbl, s.pr.x, s.pr.y);
+  });
+  
+  ctx.restore();
+};
+
+// Perpendicular biphenyl - right ring rotated 90°
+drawFns['biphenyl-perp'] = function() {
+  const id = 'biphenyl-perp';
+  const c = document.getElementById('c-' + id);
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width/DPR, H = c.height/DPR;
+  const cx = W/2, cy = H/2, s = 30;
+  const {rx, ry} = cycRot[id] || {rx: 15, ry: 0};
+  
+  ctx.save();
+  ctx.scale(DPR, DPR);
+  ctx.fillStyle = '#ede9e0';
+  ctx.fillRect(0, 0, W, H);
+  
+  const r = 1.4;
+  
+  // Ring 1 in XY plane
+  const ring1 = [];
+  for(let i = 0; i < 6; i++) {
+    const angle = i * (Math.PI / 3);
+    ring1.push([-2.5 + r * Math.cos(angle), r * Math.sin(angle), 0]);
+  }
+  
+  // Ring 2 rotated 90° (perpendicular)
+  const ring2 = [];
+  const rxRad = 90 * Math.PI / 180;
+  for(let i = 0; i < 6; i++) {
+    const angle = i * (Math.PI / 3) + Math.PI;
+    let x = r * Math.cos(angle);
+    let y = r * Math.sin(angle);
+    let z = 0;
+    let y1 = y * Math.cos(rxRad) - z * Math.sin(rxRad);
+    let z1 = y * Math.sin(rxRad) + z * Math.cos(rxRad);
+    ring2.push([2.5 + x, y1, z1]);
+  }
+  
+  // Substituents
+  const sub_X = [ring1[1][0] + 1.0 * Math.cos(Math.PI/3), ring1[1][1] + 1.0 * Math.sin(Math.PI/3), 0];
+  const sub_Y = [ring1[5][0] + 1.0 * Math.cos(5*Math.PI/3), ring1[5][1] + 1.0 * Math.sin(5*Math.PI/3), 0];
+  
+  // a, b rotated with ring
+  let x_b = 2.5 * Math.cos(Math.PI/3 + Math.PI);
+  let y_b = 2.5 * Math.sin(Math.PI/3 + Math.PI);
+  let y_b1 = y_b * Math.cos(rxRad);
+  let z_b1 = y_b * Math.sin(rxRad);
+  
+  let x_a = 2.5 * Math.cos(5*Math.PI/3 + Math.PI);
+  let y_a = 2.5 * Math.sin(5*Math.PI/3 + Math.PI);
+  let y_a1 = y_a * Math.cos(rxRad);
+  let z_a1 = y_a * Math.sin(rxRad);
+  
+  const sub_b = [2.5 + x_b, y_b1, z_b1];
+  const sub_a = [2.5 + x_a, y_a1, z_a1];
+  
+  // Project all
+  const r1p = ring1.map(a => p3d_spiro(...a, rx, ry, cx, cy, s));
+  const r2p = ring2.map(a => p3d_spiro(...a, rx, ry, cx, cy, s));
+  const Xp = p3d_spiro(...sub_X, rx, ry, cx, cy, s);
+  const Yp = p3d_spiro(...sub_Y, rx, ry, cx, cy, s);
+  const ap = p3d_spiro(...sub_a, rx, ry, cx, cy, s);
+  const bp = p3d_spiro(...sub_b, rx, ry, cx, cy, s);
+  
+  // Draw rings
+  ctx.strokeStyle = '#2d3748';
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  for(let i = 0; i < 6; i++) {
+    ctx.beginPath();
+    ctx.moveTo(r1p[i].x, r1p[i].y);
+    ctx.lineTo(r1p[(i+1)%6].x, r1p[(i+1)%6].y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(r2p[i].x, r2p[i].y);
+    ctx.lineTo(r2p[(i+1)%6].x, r2p[(i+1)%6].y);
+    ctx.stroke();
+  }
+  
+  // Central bond
+  ctx.strokeStyle = '#c84b2f';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(r1p[0].x, r1p[0].y);
+  ctx.lineTo(r2p[0].x, r2p[0].y);
+  ctx.stroke();
+  
+  // Substituent bonds
+  ctx.strokeStyle = '#4299e1';
+  ctx.lineWidth = 2.5;
+  [[r1p[1], Xp], [r1p[5], Yp], [r2p[5], ap], [r2p[1], bp]].forEach(([from, to]) => {
+    ctx.beginPath();
+    ctx.moveTo(from.x, from.y);
+    ctx.lineTo(to.x, to.y);
+    ctx.stroke();
+  });
+  
+  // Draw atoms
+  ctx.fillStyle = '#666';
+  [...r1p, ...r2p].forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 4, 0, 7);
+    ctx.fill();
+  });
+  
+  // Substituent atoms with labels
+  [{p: Xp, l: 'X'}, {p: Yp, l: 'Y'}, {p: ap, l: 'a'}, {p: bp, l: 'b'}].forEach(s => {
+    ctx.fillStyle = '#4299e1';
+    ctx.beginPath();
+    ctx.arc(s.p.x, s.p.y, 12, 0, 7);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 11px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(s.l, s.p.x, s.p.y);
+  });
+  
+  ctx.restore();
+};
+
+window.addEventListener('load',function(){
+  // Setup canvases
+  ['benzene','benz1cl','benz12cl','benz13cl','benz14cl'].forEach(id=>setupCanvas(id,240,220));
+  ['ch4','ch3cl','ch2cl2','chcl3'].forEach(id=>{setupCanvas(id,240,240);initTetDrag(id);});
+  ['allene1','allene2','allene3','allene4','allene5','allene6'].forEach(id=>{setupCanvas(id,420,240);initAlleneDrag(id);});
+  setupCanvas('13dimethylcb',300,260); initCycDrag('13dimethylcb');
+  setupCanvas('cis12mcp',300,260);    initCycDrag('cis12mcp');
+  setupCanvas('trans13mcp',300,260); initCycDrag('trans13mcp');
+  setupCanvas('cis14dcch',300,260);  initCycDrag('cis14dcch');
+  setupCanvas('trans14dcch',300,260);initCycDrag('trans14dcch');
+  setupCanvas('cis123tcp',300,260);   initCycDrag('cis123tcp');
+  setupCanvas('cis13emcp',300,260);   initCycDrag('cis13emcp');
+  // Biphenyl
+  setupCanvas('biphenyl-planar',620,320); initCycDrag('biphenyl-planar');
+  setupCanvas('biphenyl-perp',620,320); initCycDrag('biphenyl-perp');
+  // Spiro compounds
+  setupCanvas('spiro44',300,260); initCycDrag('spiro44');
+  setupCanvas('spiro45',300,260); initCycDrag('spiro45');
+  // Biphenyl
+  setupCanvas('biphenyl-planar',300,260); initCycDrag('biphenyl-planar');
+  setupCanvas('biphenyl-perp',300,260); initCycDrag('biphenyl-perp');
+  setupCanvas('44biphenyl',300,260); initCycDrag('44biphenyl');
+  // Draw all
+  Object.values(drawFns).forEach(fn=>fn());
+});
+</script>
+</body>
+</html>

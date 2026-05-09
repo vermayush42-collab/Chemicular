@@ -415,7 +415,7 @@ footer{background:var(--ink);color:rgba(245,242,236,0.5);padding:56px max(24px,5
   <div class="hero-visual reveal">
     <div class="hero-canvas-wrap">
       <canvas id="heroCanvas"></canvas>
-      <div class="hero-canvas-label">MA₃B₃ octahedral — drag to rotate</div>
+      <div class="hero-canvas-label">MA₃B₃ fac — drag to rotate</div>
     </div>
   </div>
 </section>
@@ -466,6 +466,15 @@ footer{background:var(--ink);color:rgba(245,242,236,0.5);padding:56px max(24px,5
         <div class="topic-name">Square Planar Isomerism</div>
         <p class="topic-desc">Molecular plane always POS → always O.Inactive. Cis/trans geometric isomers for 2A same types.</p>
         <div class="topic-footer"><span class="topic-meta">5 complex types</span><span class="topic-arrow">Explore →</span></div>
+      </div>
+    </a>
+    <a href="#symmetry" class="topic-card active-card" onclick="setTimeout(()=>document.getElementById('symmetry').scrollIntoView({behavior:'smooth'}),10)">
+      <div class="topic-thumb" style="background:linear-gradient(135deg,#f0e8ff 0%,#d8c8f0 100%);font-size:2.5rem">⚛️</div>
+      <div class="topic-body">
+        <span class="topic-tag" style="color:#7a2daa;background:rgba(138,43,226,0.1);">Symmetry Elements</span>
+        <div class="topic-name">POS Repository</div>
+        <p class="topic-desc">Interactive 3D structures showing Planes of Symmetry. Benzene, XeF₄, biphenyl, and more organic molecules.</p>
+        <div class="topic-footer"><span class="topic-meta">5 groups · 30+ molecules</span><span class="topic-arrow">Explore →</span></div>
       </div>
     </a>
     <div class="topic-card" style="opacity:.55;cursor:default">
@@ -937,6 +946,19 @@ footer{background:var(--ink);color:rgba(245,242,236,0.5);padding:56px max(24px,5
     </div>
 
   </div><!-- /panel-sqp -->
+</section>
+
+<!-- ═══ SYMMETRY ELEMENTS REPOSITORY ═══ -->
+<section id="symmetry" style="background:var(--paper);">
+  <div class="reveal" style="margin-bottom:28px;">
+    <div class="section-eyebrow">Symmetry Elements</div>
+    <h2 class="section-title">POS <em>Repository</em></h2>
+    <p style="font-size:0.9rem;color:var(--muted);max-width:720px;margin-top:8px;line-height:1.75;">Interactive 3D molecular structures showing <strong>Planes of Symmetry (POS)</strong>. Toggle POS on/off for each molecule. Drag to rotate structures in 3D space.</p>
+  </div>
+  
+  <div class="reveal" style="background:var(--cream);border:2px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(15,14,12,0.08);">
+    <iframe src="symmetry_STANDALONE.html" style="width:100%;height:80vh;border:none;display:block;"></iframe>
+  </div>
 </section>
 
 <!-- FOOTER -->
@@ -2358,6 +2380,7 @@ const sqp=new MolController({
 // HERO & THUMB CANVASES
 // ═══════════════════════════════════════════════
 let hRy=20,hRx=22,hVx=0.4,hDrag=false,hLX=0,hLY=0;
+let h2Ry=20,h2Rx=22,h2Vx=0.4,h2Drag=false,h2LX=0,h2LY=0;
 function initHero(){
   const c=document.getElementById('heroCanvas');if(!c)return;
   const dpr=window.devicePixelRatio||1;
@@ -2369,6 +2392,16 @@ function initHero(){
   c.addEventListener('touchstart',e=>{hDrag=true;hLX=e.touches[0].clientX;hLY=e.touches[0].clientY;},{passive:true});
   window.addEventListener('touchmove',e=>{if(!hDrag)return;hRy+=(e.touches[0].clientX-hLX)*0.6;hRx+=(e.touches[0].clientY-hLY)*0.4;hVx=(e.touches[0].clientX-hLX)*0.6;hLX=e.touches[0].clientX;hLY=e.touches[0].clientY;},{passive:true});
   window.addEventListener('touchend',()=>hDrag=false);
+  
+  // Second canvas
+  const c2=document.getElementById('heroCanvas2');if(!c2)return;
+  c2.width=w*dpr;c2.height=h*dpr;c2.style.width=w+'px';c2.style.height=h+'px';
+  c2.addEventListener('mousedown',e=>{h2Drag=true;h2LX=e.clientX;h2LY=e.clientY;});
+  window.addEventListener('mousemove',e=>{if(!h2Drag)return;h2Ry+=(e.clientX-h2LX)*0.6;h2Rx+=(e.clientY-h2LY)*0.4;h2Vx=(e.clientX-h2LX)*0.6;h2LX=e.clientX;h2LY=e.clientY;});
+  window.addEventListener('mouseup',()=>h2Drag=false);
+  c2.addEventListener('touchstart',e=>{h2Drag=true;h2LX=e.touches[0].clientX;h2LY=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchmove',e=>{if(!h2Drag)return;h2Ry+=(e.touches[0].clientX-h2LX)*0.6;h2Rx+=(e.touches[0].clientY-h2LY)*0.4;h2Vx=(e.touches[0].clientX-h2LX)*0.6;h2LX=e.touches[0].clientX;h2LY=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchend',()=>h2Drag=false);
 }
 
 function heroLoop(){
@@ -2383,6 +2416,78 @@ function heroLoop(){
     ry:hRy,rx:hRx,Rf:0.30,flash:-1,
     posIsFixed:false,posMode:'3vtx',useWedgeBonds:false,useShadow:true,showPosArrow:false
   });
+  
+  // Second canvas - trans-2,5-dichloro-1,4-dioxane (cyclic structure)
+  if(!h2Drag){h2Ry+=h2Vx*0.12;h2Vx*=0.92;}
+  h2Rx=Math.max(-60,Math.min(60,h2Rx));
+  const c2=document.getElementById('heroCanvas2');
+  if(c2){
+    const ctx=c2.getContext('2d');
+    const dpr=window.devicePixelRatio||1;
+    ctx.clearRect(0,0,c2.width,c2.height);
+    ctx.save();
+    ctx.scale(dpr,dpr);
+    const cx=c2.width/(2*dpr),cy=c2.height/(2*dpr),s=80;
+    
+    // Simple 6-membered ring with 2 Cl substituents (trans-2,5)
+    const ring=[];
+    for(let i=0;i<6;i++){
+      const a=i*Math.PI/3-Math.PI/2;
+      ring.push([1.2*Math.cos(a),1.2*Math.sin(a),0]);
+    }
+    
+    // Rotate ring
+    const rx=h2Rx*Math.PI/180,ry=h2Ry*Math.PI/180;
+    ring.forEach(v=>{
+      let[x,y,z]=v;
+      let y1=y*Math.cos(rx)-z*Math.sin(rx),z1=y*Math.sin(rx)+z*Math.cos(rx);
+      let x1=x*Math.cos(ry)+z1*Math.sin(ry),z2=-x*Math.sin(ry)+z1*Math.cos(ry);
+      v[0]=x1;v[1]=y1;v[2]=z2;
+    });
+    
+    // Draw ring bonds
+    ctx.strokeStyle='#2d3748';
+    ctx.lineWidth=3;
+    for(let i=0;i<6;i++){
+      ctx.beginPath();
+      ctx.moveTo(cx+ring[i][0]*s,cy-ring[i][1]*s);
+      ctx.lineTo(cx+ring[(i+1)%6][0]*s,cy-ring[(i+1)%6][1]*s);
+      ctx.stroke();
+    }
+    
+    // Draw atoms
+    ctx.fillStyle='#666';
+    ring.forEach((v,i)=>{
+      ctx.beginPath();
+      ctx.arc(cx+v[0]*s,cy-v[1]*s,6,0,7);
+      ctx.fill();
+    });
+    
+    // Chlorine atoms at positions 2 and 5 (trans)
+    [[1,'#2d9e75'],[4,'#2d9e75']].forEach(([idx,col])=>{
+      const v=ring[idx];
+      const dir=[v[0]/1.2,v[1]/1.2,0];
+      const clX=v[0]+dir[0]*0.6,clY=v[1]+dir[1]*0.6;
+      ctx.strokeStyle=col;
+      ctx.lineWidth=2.5;
+      ctx.beginPath();
+      ctx.moveTo(cx+v[0]*s,cy-v[1]*s);
+      ctx.lineTo(cx+clX*s,cy-clY*s);
+      ctx.stroke();
+      ctx.fillStyle=col;
+      ctx.beginPath();
+      ctx.arc(cx+clX*s,cy-clY*s,10,0,7);
+      ctx.fill();
+      ctx.fillStyle='#fff';
+      ctx.font='bold 9px Arial';
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText('Cl',cx+clX*s,cy-clY*s);
+    });
+    
+    ctx.restore();
+  }
+  
   requestAnimationFrame(heroLoop);
 }
 

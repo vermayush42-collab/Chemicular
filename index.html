@@ -1664,6 +1664,21 @@ function hitTestTet(canvas,ex,ey,tetLastPos){
   return -1; // don't cycle M
 }
 
+// Fix old localStorage data for optically active structures
+try {
+  const key = 'chemicular_bi_oct_bi_maa_a3b_2';
+  const stored = localStorage.getItem(key);
+  if (stored) {
+    const data = JSON.parse(stored);
+    // Force correct settings for optically active structure
+    if (data.showPOS !== false || data.posVerts.length > 0) {
+      data.showPOS = false;
+      data.posVerts = [];
+      localStorage.setItem(key, JSON.stringify(data));
+    }
+  }
+} catch(e) {}
+
 const BAKED_STATES={
   "chemicular_octahedral_states":{"ma6":{"ligs":["A","A","A","A","A","A"],"showPOS":true,"posVerts":[2,3,4],"posMode":"3vtx"},"ma5b":{"ligs":["A","A","A","A","A","B"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma4bc":{"ligs":["A","A","B","A","A","C"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma4b2c":{"ligs":["A","A","B","A","A","B"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma4b2t":{"ligs":["B","B","A","A","A","A"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma3b3m":{"ligs":["A","A","B","A","B","B"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma3bcdf":{"ligs":["A","D","A","B","A","C"],"showPOS":false,"posVerts":[],"posMode":"3vtx"},"ma3bcdm":{"ligs":["A","A","D","A","B","C"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma3bcdm2":{"ligs":["A","A","C","A","D","B"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma3bcdm3":{"ligs":["A","A","B","A","C","D"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma4bcc":{"ligs":["A","A","B","A","C","A"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma4bct":{"ligs":["A","A","A","A","B","C"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma3b2cm1":{"ligs":["A","A","A","C","B","B"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma3b2cm2":{"ligs":["A","A","A","B","C","B"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma3b3f":{"ligs":["B","A","A","B","A","B"],"showPOS":true,"posVerts":[0,1],"posMode":"throughM"},"ma2b2c2":{"ligs":["A","A","B","B","C","C"],"showPOS":true,"posVerts":[3,4,5],"posMode":"3vtx"},"ma3b2cf":{"ligs":["A","C","A","B","A","B"],"showPOS":true,"posVerts":[0,1],"posMode":"throughM"},"mabcdef":{"showPOS":false,"posVerts":[],"posMode":"3vtx"}},
   "chemicular_tetrahedral_states":{"tma3b":{"ligs":["A","A","A","B"],"showPOS":true,"posVerts":[],"posMode":"throughM"},"tma4":{"ligs":["A","A","A","A"],"showPOS":true,"posVerts":[],"posMode":"throughM"},"tma2b2":{"ligs":["A","B","B","A"],"showPOS":true,"posVerts":[],"posMode":"throughM"},"tma2bc":{"ligs":["B","A","A","C"],"showPOS":true,"posVerts":[],"posMode":"throughM"}},
